@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Scanning & Enumeration (L0) — Hack2Own</title>
+<meta name="description" content="Free L0 introduction to scanning & enumeration. Part of the Hack2Own pentest curriculum." />
+<meta name="keywords" content="port scanning, nmap, enumeration, service detection, Hack2Own" />
+<link rel="canonical" href="https://hack2own.com/modules/scanning/l0.html" />
+<meta name="robots" content="index, follow" />
+<meta property="og:title" content="Scanning & Enumeration (L0) — Hack2Own" />
+<meta property="og:description" content="Free L0 introduction to scanning & enumeration." />
+<meta property="og:url" content="https://hack2own.com/modules/scanning/l0.html" />
+<meta property="og:image" content="https://hack2own.com/assets/img/og-cover.svg" />
+<meta property="og:type" content="article" />
+<link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../assets/css/style.css" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "Scanning & Enumeration (L0)",
+  "description": "Free L0 introduction to scanning & enumeration.",
+  "provider": { "@type": "EducationalOrganization", "name": "Hack2Own", "sameAs": "https://hack2own.com" },
+  "isAccessibleForFree": true,
+  "educationalLevel": "Beginner"
+}
+</script>
+</head>
+<body>
+
+<!-- NAVBAR with level switcher in the centre -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../../index.html" class="brand"><span class="mark">H2O</span>Hack<b>2</b>Own</a>
+
+    <!-- LEVEL SWITCHER -->
+    <div class="lvl-nav" data-module="scanning" data-level="0">
+      <button class="lvl-btn lvl-prev" aria-label="Go shallow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        <span class="tip">Go Shallow</span>
+      </button>
+      <div class="lvl-display"></div>
+      <button class="lvl-btn lvl-next" aria-label="Go deeper">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        <span class="tip">Go Deeper</span>
+      </button>
+    </div>
+
+    <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="../../index.html#modules">Modules</a></li>
+      <li><a href="../../pages/pricing.html">Pricing</a></li>
+      <li><a href="../../pages/faq.html">FAQ</a></li>
+      <li><a href="../../pages/locked.html?module=scanning&level=1" class="btn btn-primary">Sign Up →</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="lesson">
+    <!-- SIDEBAR -->
+    <aside class="lesson-side">
+      <h4>Module 02 · L0</h4>
+      <ul>
+        <li><a href="#intro" class="active">What is scanning?</a></li>
+        <li><a href="#ports">Ports & services</a></li>
+        <li><a href="#enum">Enumeration</a></li>
+        <li><a href="#wrap">Wrap-up</a></li>
+      </ul>
+    </aside>
+
+    <!-- CONTENT -->
+    <article class="prose">
+      <span class="eyebrow">// module 02 · scanning</span>
+      <h1>Scanning & Enumeration</h1>
+      <p style="font-size:1.05rem;">Once you know a target exists, you find its open doors. Scanning and enumeration turn a map into a list of concrete, reachable services — the things you can actually try.</p>
+      <h2 id="intro">What is scanning?</h2>
+      <p>Scanning is active reconnaissance: you send packets to a target and listen to what comes back. Where recon told you <em>what exists</em>, scanning tells you <em>what's reachable and responding</em>.</p>
+      <div class="callout"><strong>Mindset:</strong> Take it one phase at a time — each builds on the last.</div>
+      <h2 id="ports">Ports & services</h2>
+      <p>Every networked service listens on a port. A port scan asks each port "are you open?" and notes the replies. Open ports are doors; the service behind each one is what you'll study next.</p>
+      <figure>
+        <img src="../../assets/img/placeholder.svg" alt="Diagram for Scanning & Enumeration" />
+        <figcaption>Drop your own diagram or screenshot here.</figcaption>
+      </figure>
+      <h2 id="enum">Enumeration</h2>
+      <p>Enumeration goes a layer deeper: not just "port 80 is open" but "it's running a specific web server, with these paths, and this banner." The richer your enumeration, the clearer your attack surface.</p>
+      <pre><code># Classic first scan against a lab target you own
+nmap -sV -p- 10.10.10.5      # all ports, detect versions
+nmap --top-ports 100 10.10.10.5
+# Then enumerate what you found</code></pre>
+      <div class="callout warn"><strong>Stay legal:</strong> Scanning is <strong>active</strong> — it touches the target and is logged. Only scan systems you own or have written permission to test.</div>
+      <h2 id="wrap">Wrap-up</h2>
+      <p>You now understand the jump from recon to scanning, what ports and services are, and why enumeration is where real detail lives. That's the surface of phase two.</p>
+
+      <!-- BUNDLE: buy all levels of THIS module -->
+      <div class="bundle">
+        <h3>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3ef6a4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg>
+          Own this module — all levels
+        </h3>
+        <p style="font-size:.92rem;">Prefer one module à la carte instead of a full subscription? Bundle every depth of Scanning & Enumeration.</p>
+        <div class="rows">
+          <div class="row"><span>L1 · Apprentice (CEH-aligned theory)</span><span class="amt">₹2,000</span></div>
+          <div class="row"><span>L2 · Professional (hosted labs)</span><span class="amt">₹5,000</span></div>
+          <div class="row"><span>L3 · Expert (advanced labs)</span><span class="amt">₹7,500</span></div>
+        </div>
+        <div class="total">
+          <div>
+            <div style="font-family:var(--mono);font-size:.78rem;color:var(--fade);">Module bundle · all depths</div>
+            <div class="big">₹14,500</div>
+          </div>
+          <a href="../../pages/locked.html?module=scanning&level=1" class="btn btn-primary">Unlock the module →</a>
+        </div>
+      </div>
+
+      <p style="font-size:.85rem;color:var(--fade);">Use the <span class="accent-cyan">arrows in the navbar</span> to change depth — or sign up to unlock L1–L3.</p>
+    </article>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-bot">
+      <span>© 2026 Hack2Own (H2O). For educational use only.</span>
+      <span><a href="../../index.html">← back to surface</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="../../assets/js/main.js"></script>
+<script src="../../assets/js/levels.js"></script>
+</body>
+</html>

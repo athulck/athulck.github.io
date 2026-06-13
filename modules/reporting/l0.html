@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Reporting & Methodology (L0) — Hack2Own</title>
+<meta name="description" content="Free L0 introduction to reporting & methodology. Part of the Hack2Own pentest curriculum." />
+<meta name="keywords" content="pentest report, methodology, documentation, remediation, OSCP report, Hack2Own" />
+<link rel="canonical" href="https://hack2own.com/modules/reporting/l0.html" />
+<meta name="robots" content="index, follow" />
+<meta property="og:title" content="Reporting & Methodology (L0) — Hack2Own" />
+<meta property="og:description" content="Free L0 introduction to reporting & methodology." />
+<meta property="og:url" content="https://hack2own.com/modules/reporting/l0.html" />
+<meta property="og:image" content="https://hack2own.com/assets/img/og-cover.svg" />
+<meta property="og:type" content="article" />
+<link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../assets/css/style.css" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "Reporting & Methodology (L0)",
+  "description": "Free L0 introduction to reporting & methodology.",
+  "provider": { "@type": "EducationalOrganization", "name": "Hack2Own", "sameAs": "https://hack2own.com" },
+  "isAccessibleForFree": true,
+  "educationalLevel": "Beginner"
+}
+</script>
+</head>
+<body>
+
+<!-- NAVBAR with level switcher in the centre -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../../index.html" class="brand"><span class="mark">H2O</span>Hack<b>2</b>Own</a>
+
+    <!-- LEVEL SWITCHER -->
+    <div class="lvl-nav" data-module="reporting" data-level="0">
+      <button class="lvl-btn lvl-prev" aria-label="Go shallow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        <span class="tip">Go Shallow</span>
+      </button>
+      <div class="lvl-display"></div>
+      <button class="lvl-btn lvl-next" aria-label="Go deeper">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        <span class="tip">Go Deeper</span>
+      </button>
+    </div>
+
+    <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="../../index.html#modules">Modules</a></li>
+      <li><a href="../../pages/pricing.html">Pricing</a></li>
+      <li><a href="../../pages/faq.html">FAQ</a></li>
+      <li><a href="../../pages/locked.html?module=reporting&level=1" class="btn btn-primary">Sign Up →</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="lesson">
+    <!-- SIDEBAR -->
+    <aside class="lesson-side">
+      <h4>Module 06 · L0</h4>
+      <ul>
+        <li><a href="#intro" class="active">Why reporting matters</a></li>
+        <li><a href="#method">Having a methodology</a></li>
+        <li><a href="#notes">Notes & evidence</a></li>
+        <li><a href="#wrap">Wrap-up</a></li>
+      </ul>
+    </aside>
+
+    <!-- CONTENT -->
+    <article class="prose">
+      <span class="eyebrow">// module 06 · reporting</span>
+      <h1>Reporting & Methodology</h1>
+      <p style="font-size:1.05rem;">The skill that actually pays. A brilliant exploit means nothing if you can't explain it. Reporting and methodology turn what you found into something a client can understand and fix.</p>
+      <h2 id="intro">Why reporting matters</h2>
+      <p>Clients don't pay for access — they pay for clarity: what's wrong, how bad it is, and how to fix it. Your report is the product. It's also exactly what certifications like OSCP grade you on.</p>
+      <div class="callout"><strong>Mindset:</strong> Take it one phase at a time — each builds on the last.</div>
+      <h2 id="method">Having a methodology</h2>
+      <p>A methodology is a repeatable process so you don't miss things under pressure: recon to scan to exploit to escalate to document. Following a consistent flow is what separates professionals from lucky guessers.</p>
+      <figure>
+        <img src="../../assets/img/placeholder.svg" alt="Diagram for Reporting & Methodology" />
+        <figcaption>Drop your own diagram or screenshot here.</figcaption>
+      </figure>
+      <h2 id="notes">Notes & evidence</h2>
+      <p>Great pentesters document as they go — commands, screenshots, timestamps. At L0, build the habit early: if it isn't written down with evidence, it didn't happen.</p>
+      <pre><code>## Target: 10.10.10.5
+## Finding: <what>  | Severity: <low/med/high>
+## Steps to reproduce: 1) ... 2) ...
+## Evidence: screenshot-01.png
+## Remediation: <how to fix></code></pre>
+      <div class="callout warn"><strong>Stay legal:</strong> Good documentation is also your legal protection — it records scope, permission, and exactly what you did.</div>
+      <h2 id="wrap">Wrap-up</h2>
+      <p>You now understand why the report is the real deliverable, why a repeatable methodology matters, and why disciplined note-taking underpins everything. That's the surface of professional practice.</p>
+
+      <!-- BUNDLE: buy all levels of THIS module -->
+      <div class="bundle">
+        <h3>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3ef6a4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg>
+          Own this module — all levels
+        </h3>
+        <p style="font-size:.92rem;">Prefer one module à la carte instead of a full subscription? Bundle every depth of Reporting & Methodology.</p>
+        <div class="rows">
+          <div class="row"><span>L1 · Apprentice (CEH-aligned theory)</span><span class="amt">₹2,000</span></div>
+          <div class="row"><span>L2 · Professional (hosted labs)</span><span class="amt">₹5,000</span></div>
+          <div class="row"><span>L3 · Expert (advanced labs)</span><span class="amt">₹7,500</span></div>
+        </div>
+        <div class="total">
+          <div>
+            <div style="font-family:var(--mono);font-size:.78rem;color:var(--fade);">Module bundle · all depths</div>
+            <div class="big">₹14,500</div>
+          </div>
+          <a href="../../pages/locked.html?module=reporting&level=1" class="btn btn-primary">Unlock the module →</a>
+        </div>
+      </div>
+
+      <p style="font-size:.85rem;color:var(--fade);">Use the <span class="accent-cyan">arrows in the navbar</span> to change depth — or sign up to unlock L1–L3.</p>
+    </article>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-bot">
+      <span>© 2026 Hack2Own (H2O). For educational use only.</span>
+      <span><a href="../../index.html">← back to surface</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="../../assets/js/main.js"></script>
+<script src="../../assets/js/levels.js"></script>
+</body>
+</html>

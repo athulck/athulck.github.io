@@ -1,0 +1,22 @@
+# Hack2Own — robots.txt
+User-agent: *
+Allow: /
+
+# Locked/auth pages carry no public content
+Disallow: /pages/locked.html
+
+# AI crawlers welcome (we want discovery)
+User-agent: GPTBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-Web
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: CCBot
+Allow: /
+
+Sitemap: https://hack2own.com/sitemap.xml

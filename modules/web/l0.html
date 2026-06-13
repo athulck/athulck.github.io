@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Web Application Attacks (L0) — Hack2Own</title>
+<meta name="description" content="Free L0 introduction to web application attacks. Part of the Hack2Own pentest curriculum." />
+<meta name="keywords" content="OWASP top 10, web security, SQL injection, XSS, web pentest, Hack2Own" />
+<link rel="canonical" href="https://hack2own.com/modules/web/l0.html" />
+<meta name="robots" content="index, follow" />
+<meta property="og:title" content="Web Application Attacks (L0) — Hack2Own" />
+<meta property="og:description" content="Free L0 introduction to web application attacks." />
+<meta property="og:url" content="https://hack2own.com/modules/web/l0.html" />
+<meta property="og:image" content="https://hack2own.com/assets/img/og-cover.svg" />
+<meta property="og:type" content="article" />
+<link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../assets/css/style.css" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "Web Application Attacks (L0)",
+  "description": "Free L0 introduction to web application attacks.",
+  "provider": { "@type": "EducationalOrganization", "name": "Hack2Own", "sameAs": "https://hack2own.com" },
+  "isAccessibleForFree": true,
+  "educationalLevel": "Beginner"
+}
+</script>
+</head>
+<body>
+
+<!-- NAVBAR with level switcher in the centre -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../../index.html" class="brand"><span class="mark">H2O</span>Hack<b>2</b>Own</a>
+
+    <!-- LEVEL SWITCHER -->
+    <div class="lvl-nav" data-module="web" data-level="0">
+      <button class="lvl-btn lvl-prev" aria-label="Go shallow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        <span class="tip">Go Shallow</span>
+      </button>
+      <div class="lvl-display"></div>
+      <button class="lvl-btn lvl-next" aria-label="Go deeper">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        <span class="tip">Go Deeper</span>
+      </button>
+    </div>
+
+    <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="../../index.html#modules">Modules</a></li>
+      <li><a href="../../pages/pricing.html">Pricing</a></li>
+      <li><a href="../../pages/faq.html">FAQ</a></li>
+      <li><a href="../../pages/locked.html?module=web&level=1" class="btn btn-primary">Sign Up →</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="lesson">
+    <!-- SIDEBAR -->
+    <aside class="lesson-side">
+      <h4>Module 03 · L0</h4>
+      <ul>
+        <li><a href="#intro" class="active">Why the web?</a></li>
+        <li><a href="#owasp">The OWASP Top 10</a></li>
+        <li><a href="#input">Input is the attack surface</a></li>
+        <li><a href="#wrap">Wrap-up</a></li>
+      </ul>
+    </aside>
+
+    <!-- CONTENT -->
+    <article class="prose">
+      <span class="eyebrow">// module 03 · web</span>
+      <h1>Web Application Attacks</h1>
+      <p style="font-size:1.05rem;">Most breaches start in the browser. Web applications are sprawling, fast-changing, and exposed to the whole internet — which is exactly why they're where so many attacks begin.</p>
+      <h2 id="intro">Why the web?</h2>
+      <p>Web apps accept untrusted input from anyone, anywhere, and turn it into actions on a server. Every input is a question: "what happens if I send something the developer didn't expect?"</p>
+      <div class="callout"><strong>Mindset:</strong> Take it one phase at a time — each builds on the last.</div>
+      <h2 id="owasp">The OWASP Top 10</h2>
+      <p>The OWASP Top 10 is the industry's shorthand for the most common web weaknesses — injection, broken access control, misconfiguration, and more. At L0 you only need to recognise the categories and the idea behind each.</p>
+      <figure>
+        <img src="../../assets/img/placeholder.svg" alt="Diagram for Web Application Attacks" />
+        <figcaption>Drop your own diagram or screenshot here.</figcaption>
+      </figure>
+      <h2 id="input">Input is the attack surface</h2>
+      <p>Forms, URLs, headers, cookies, APIs — anywhere the app reads something you control is a place to test. The attacker's instinct: trust nothing the app claims, verify everything you can reach.</p>
+      <pre><code># Observe how an app responds to unexpected input (lab only)
+curl -i "https://lab.example/search?q=test"
+curl -i "https://lab.example/search?q=test'"   # does it break?
+# A different response can hint at how input is handled</code></pre>
+      <div class="callout warn"><strong>Stay legal:</strong> Practise only on intentionally-vulnerable labs (e.g. ones you host yourself). Testing real sites without permission is illegal.</div>
+      <h2 id="wrap">Wrap-up</h2>
+      <p>You now know why web apps are such a rich target, what the OWASP Top 10 represents, and why every input is a potential door. That's the surface of web hacking.</p>
+
+      <!-- BUNDLE: buy all levels of THIS module -->
+      <div class="bundle">
+        <h3>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3ef6a4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg>
+          Own this module — all levels
+        </h3>
+        <p style="font-size:.92rem;">Prefer one module à la carte instead of a full subscription? Bundle every depth of Web Application Attacks.</p>
+        <div class="rows">
+          <div class="row"><span>L1 · Apprentice (CEH-aligned theory)</span><span class="amt">₹2,000</span></div>
+          <div class="row"><span>L2 · Professional (hosted labs)</span><span class="amt">₹5,000</span></div>
+          <div class="row"><span>L3 · Expert (advanced labs)</span><span class="amt">₹7,500</span></div>
+        </div>
+        <div class="total">
+          <div>
+            <div style="font-family:var(--mono);font-size:.78rem;color:var(--fade);">Module bundle · all depths</div>
+            <div class="big">₹14,500</div>
+          </div>
+          <a href="../../pages/locked.html?module=web&level=1" class="btn btn-primary">Unlock the module →</a>
+        </div>
+      </div>
+
+      <p style="font-size:.85rem;color:var(--fade);">Use the <span class="accent-cyan">arrows in the navbar</span> to change depth — or sign up to unlock L1–L3.</p>
+    </article>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-bot">
+      <span>© 2026 Hack2Own (H2O). For educational use only.</span>
+      <span><a href="../../index.html">← back to surface</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="../../assets/js/main.js"></script>
+<script src="../../assets/js/levels.js"></script>
+</body>
+</html>

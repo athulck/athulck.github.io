@@ -1,0 +1,30 @@
+# Hack2Own (H2O)
+
+> Hack2Own is a hands-on cybersecurity learning platform for aspiring penetration testers, born in Kerala and built for India. Content is organised into modules, each available at four depths (L0 to L3). The L0 "surface" tier is free forever; deeper tiers are paid and align to the CEH, eJPT, and OSCP certifications. This site hosts the free L0 content and acts as the entry point to the full platform.
+
+## Model
+
+- Four tiers per module: L0 Noob (free), L1 Apprentice (₹7,500 one-time, CEH-aligned), L2 Professional (₹22,000/yr, hosted labs, eJPT-aligned), L3 Expert (₹30,000/yr, advanced labs, OSCP-aligned).
+- À la carte: single modules can be bought per-level (L1 ₹2,000, L2 ₹5,000, L3 ₹7,500 per module).
+- L0 is permanently free and requires no account. Clicking a deeper level prompts sign-up for the full platform.
+- Ethics-first: all offensive skills are taught strictly for authorised, legal penetration testing.
+
+## Key pages
+
+- [Home](https://hack2own.com/): Overview, tier ladder, and the module list.
+- [Pricing](https://hack2own.com/pages/pricing.html): Full tier table and à la carte vs subscription comparison.
+- [About](https://hack2own.com/pages/about.html): Mission, philosophy, and the free-first model.
+- [FAQ](https://hack2own.com/pages/faq.html): Tiers, pricing, labs, certifications, and ethics.
+
+## Free modules (L0)
+
+- [Reconnaissance & Footprinting](https://hack2own.com/modules/recon/l0.html): OSINT, passive vs active recon, DNS/WHOIS.
+- [Scanning & Enumeration](https://hack2own.com/modules/scanning/l0.html): Ports, services, and enumeration.
+- [Web Application Attacks](https://hack2own.com/modules/web/l0.html): OWASP Top 10 and input as attack surface.
+- [Network Exploitation](https://hack2own.com/modules/network/l0.html): Protocols, misconfigurations, lateral movement.
+- [Privilege Escalation](https://hack2own.com/modules/privesc/l0.html): Linux & Windows escalation fundamentals.
+- [Reporting & Methodology](https://hack2own.com/modules/reporting/l0.html): Pentest reporting and repeatable process.
+
+## Contact
+
+- Email: hello@hack2own.com
