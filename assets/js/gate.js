@@ -24,9 +24,9 @@
   var pill = document.getElementById("gate-level");
   var title = document.getElementById("gate-title");
   var body = document.getElementById("gate-body");
-  if (pill) pill.textContent = info.lv + " · " + info.nm + " · " + info.cert;
-  if (title) title.innerHTML = 'Unlock <span class="accent">' + info.lv + " " + info.nm + '</span>';
-  if (body) body.textContent =
-    "“" + modName + "” at " + info.lv + " unlocks " + info.blurb +
-    ". This tier is part of the full Hack2Own platform — sign up to continue your descent. (" + info.price + ")";
+  //if (pill) pill.textContent = info.lv + " · " + info.nm + " · " + info.cert;
+  //if (title) title.innerHTML = 'Unlock <span class="accent">' + info.lv + " " + info.nm + '</span>';
+  //if (body) body.textContent =
+    //"“" + modName + "” at " + info.lv + " unlocks " + info.blurb +
+    //". This tier is part of the full Hack2Own platform — sign up to continue your descent. (" + info.price + ")";
 })();
