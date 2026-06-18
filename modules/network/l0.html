@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Network Exploitation (L0) — Hack2Own</title>
-<meta name="description" content="Free L0 introduction to network exploitation. Part of the Hack2Own pentest curriculum." />
-<meta name="keywords" content="network exploitation, lateral movement, protocols, pivoting, Hack2Own" />
+<title>Network VAPT (L0) — Hack2Own</title>
+<meta name="description" content="Free L0 introduction to Network VAPT. Learn networks, subnets, ports, services, Nmap, Ncat, and Nessus. Part of the Hack2Own pentest curriculum." />
+<meta name="keywords" content="network VAPT, nmap, ncat, nessus, subnets, ports, services, penetration testing, Hack2Own" />
 <link rel="canonical" href="https://hack2own.com/modules/network/l0.html" />
 <meta name="robots" content="index, follow" />
-<meta property="og:title" content="Network Exploitation (L0) — Hack2Own" />
-<meta property="og:description" content="Free L0 introduction to network exploitation." />
+<meta property="og:title" content="Network VAPT (L0) — Hack2Own" />
+<meta property="og:description" content="Free L0 introduction to Network VAPT." />
 <meta property="og:url" content="https://hack2own.com/modules/network/l0.html" />
 <meta property="og:image" content="https://hack2own.com/assets/img/og-cover.svg" />
 <meta property="og:type" content="article" />
@@ -18,12 +18,18 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="../../assets/css/style.css" />
+<style>
+  /* Offset anchor scroll position so headings aren't hidden behind the fixed navbar */
+  h2[id], h3[id] {
+    scroll-margin-top: 80px;
+  }
+</style>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Course",
-  "name": "Network Exploitation (L0)",
-  "description": "Free L0 introduction to network exploitation.",
+  "name": "Network VAPT (L0)",
+  "description": "Free L0 introduction to Network Vulnerability Assessment and Penetration Testing.",
   "provider": { "@type": "EducationalOrganization", "name": "Hack2Own", "sameAs": "https://hack2own.com" },
   "isAccessibleForFree": true,
   "educationalLevel": "Beginner"
@@ -66,58 +72,375 @@
     <aside class="lesson-side">
       <h4>Module 04 · L0</h4>
       <ul>
-        <li><a href="#intro" class="active">Thinking in networks</a></li>
-        <li><a href="#proto">Protocols & misconfigurations</a></li>
-        <li><a href="#pivot">Pivoting & lateral movement</a></li>
-        <li><a href="#wrap">Wrap-up</a></li>
+        <li><a href="#intro" class="active">What is Network VAPT?</a></li>
+        <li><a href="#networks">Networks &amp; Subnets</a></li>
+        <li><a href="#ports">Ports &amp; Services</a></li>
+        <li><a href="#recon">Recon with Nmap</a></li>
+        <li><a href="#tools">Ncat &amp; Nessus</a></li>
+        <li><a href="#wrap">Wrap-up &amp; Resources</a></li>
       </ul>
     </aside>
 
     <!-- CONTENT -->
     <article class="prose">
       <span class="eyebrow">// module 04 · network</span>
-      <h1>Network Exploitation</h1>
-      <p style="font-size:1.05rem;">A foothold on one machine is rarely the goal. Network exploitation is about understanding how systems talk to each other — and how a single weak link lets you move through the whole environment.</p>
-      <h2 id="intro">Thinking in networks</h2>
-      <p>Real targets are rarely a single box. They're networks: servers, workstations, and services that trust each other. Understanding those trust relationships is the core skill here.</p>
-      <div class="callout"><strong>Mindset:</strong> Take it one phase at a time — each builds on the last.</div>
-      <h2 id="proto">Protocols & misconfigurations</h2>
-      <p>Protocols like SMB, RDP, and SSH are everywhere — and often misconfigured. Default credentials, exposed shares, and weak settings are the bread and butter of network attacks.</p>
-      <figure>
-        <img src="../../assets/img/placeholder.svg" alt="Diagram for Network Exploitation" />
-        <figcaption>Drop your own diagram or screenshot here.</figcaption>
-      </figure>
-      <h2 id="pivot">Pivoting & lateral movement</h2>
-      <p>Once inside, attackers <em>pivot</em>: using one compromised host to reach others that weren't exposed to the internet. At L0, just hold the mental model — access spreads through trust.</p>
-      <pre><code># Enumerate common network services (lab environment)
-nmap -p 22,139,445,3389 10.10.10.0/24
-# Open SMB? RDP? Each is a relationship worth understanding</code></pre>
-      <div class="callout warn"><strong>Stay legal:</strong> Network attacks are noisy and high-impact. Confine all practice to isolated lab networks you control.</div>
-      <h2 id="wrap">Wrap-up</h2>
-      <p>You now see targets as networks, understand why protocol misconfigurations matter, and grasp the idea of lateral movement. That's the surface of network exploitation.</p>
+      <h1>Network VAPT</h1>
+      <p style="font-size:1.05rem;">Every organisation runs on a network. Every network has a story — of who connects where, what's exposed, and what's been forgotten. Network VAPT is the art of reading that story before the wrong person does.</p>
 
-      <!-- BUNDLE: buy all levels of THIS module -->
-      <div class="bundle">
-        <h3>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3ef6a4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg>
-          Own this module — all levels
-        </h3>
-        <p style="font-size:.92rem;">Prefer one module à la carte instead of a full subscription? Bundle every depth of Network Exploitation.</p>
-        <div class="rows">
-          <div class="row"><span>L1 · Apprentice (CEH-aligned theory)</span><span class="amt">₹2,000</span></div>
-          <div class="row"><span>L2 · Professional (hosted labs)</span><span class="amt">₹5,000</span></div>
-          <div class="row"><span>L3 · Expert (advanced labs)</span><span class="amt">₹7,500</span></div>
-        </div>
-        <div class="total">
-          <div>
-            <div style="font-family:var(--mono);font-size:.78rem;color:var(--fade);">Module bundle · all depths</div>
-            <div class="big">₹14,500</div>
-          </div>
-          <a href="../../pages/locked.html?module=network&level=1" class="btn btn-primary">Unlock the module →</a>
-        </div>
-      </div>
+      <!-- ═══════════════════════════════════════════════ -->
+      <h2 id="intro">What is Network VAPT?</h2>
 
-      <p style="font-size:.85rem;color:var(--fade);">Use the <span class="accent-cyan">arrows in the navbar</span> to change depth — or sign up to unlock L1–L3.</p>
+      <p>Imagine you've just been hired by a company to test their security. You don't know their network. You don't know their servers. You have an IP range, a signed scope document, and a terminal. Your job: find every crack before an attacker does.</p>
+
+      <p>That's <strong>Network VAPT</strong> — Vulnerability Assessment and Penetration Testing applied to networks. It splits neatly into two phases that work together:</p>
+
+      <p><strong>Vulnerability Assessment (VA)</strong> is the systematic process of scanning, identifying, and cataloguing weaknesses. Think of it as a detailed health check — you're not breaking anything, just measuring.</p>
+
+      <p><strong>Penetration Testing (PT)</strong> is where you take those findings and actually try to exploit them, in a controlled way, to understand real-world impact. Can you get in? How far can you go? What data is at risk?</p>
+
+      <div class="callout"><strong>Why bother?</strong> Organisations run services they've forgotten about. Servers go unpatched for years. Default passwords linger. Network VAPT is how defenders discover these issues before attackers stumble on them — and stumble they will.</div>
+
+      <p>The methodology follows a clear arc: <strong>Reconnaissance → Scanning → Enumeration → Exploitation → Reporting</strong>. This module covers the first three in depth — the groundwork every successful test is built on.</p>
+
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <h2 id="networks">Networks &amp; Subnets</h2>
+
+      <p>Before you can probe a network, you need to understand how one is built. Let's go from first principles.</p>
+
+      <h3>What is a network?</h3>
+      <p>A network is a group of devices — computers, servers, printers, phones — that can communicate with each other. In a corporate environment, you might have hundreds or thousands of devices connected. Each one has an <strong>IP address</strong>: a unique numerical label that identifies it on the network.</p>
+
+      <p>IP addresses come in two flavours. <strong>IPv4</strong> is the one you'll see most: four numbers separated by dots, like <code>192.168.1.10</code>. Each number ranges from 0 to 255. IPv6 exists too (and is growing), but IPv4 still dominates most internal networks.</p>
+
+      <h3>Subnets: dividing the space</h3>
+      <p>A large network is rarely one flat pool of addresses. It's divided into <strong>subnets</strong> — smaller logical segments. This is done for security, performance, and organisation. The HR department shouldn't be on the same segment as the production database servers, for example.</p>
+
+      <p>A subnet is defined by two things: a <strong>network address</strong> and a <strong>subnet mask</strong> (or its shorthand, the <strong>CIDR prefix</strong>). You'll often see subnets written like this:</p>
+
+      <pre><code>192.168.1.0/24</code></pre>
+
+      <p>The <code>/24</code> tells you that 24 bits are the "network" part of the address, and the remaining 8 bits identify individual hosts. A <code>/24</code> subnet gives you 256 total addresses (254 usable — the first is the network address and the last is the broadcast address).</p>
+
+      <pre><code># Common subnet sizes at a glance:
+/24  →  254 hosts   (e.g. 192.168.1.0  – 192.168.1.255)
+/16  →  65,534 hosts (e.g. 10.0.0.0    – 10.255.255.255)
+/8   →  16 million hosts (the entire 10.x.x.x space)
+
+# Private IP ranges (internal networks only):
+10.0.0.0/8
+172.16.0.0/12
+192.168.0.0/16</code></pre>
+
+      <div class="callout"><strong>Pentest relevance:</strong> When you're handed a scope like <code>10.10.10.0/24</code>, you know exactly how many hosts might exist: up to 254. Your first job is figuring out which of them are alive.</div>
+
+      <h3>The OSI model — just enough to matter</h3>
+      <p>You'll hear the OSI model mentioned constantly. It's a conceptual framework that breaks network communication into seven layers. You don't need to memorise all seven for VAPT work, but these three are your daily vocabulary:</p>
+
+      <pre><code>Layer 3 · Network     – IP addresses, routing (packets travel here)
+Layer 4 · Transport   – TCP/UDP, ports (connections happen here)
+Layer 7 · Application – HTTP, SSH, FTP (protocols you'll exploit here)</code></pre>
+
+      <p>Most network attacks target layers 3, 4, and 7. Understanding which layer a vulnerability lives in tells you what tools and techniques apply.</p>
+
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <h2 id="ports">Ports &amp; Services</h2>
+
+      <p>If an IP address is a building's street address, then <strong>ports</strong> are the individual doors. Each port is a number (0–65535) that represents a specific communication channel on a host. When a service starts — a web server, an SSH daemon, a database — it "listens" on one or more ports.</p>
+
+      <h3>TCP vs UDP</h3>
+      <p>Traffic arrives via two main transport protocols. <strong>TCP</strong> (Transmission Control Protocol) is connection-oriented: it establishes a handshake, confirms delivery, and ensures packets arrive in order. <strong>UDP</strong> (User Datagram Protocol) is fire-and-forget — faster, but no delivery guarantee. Most services you'll encounter in VAPT run on TCP.</p>
+
+      <h3>Well-known ports to memorise</h3>
+      <p>Certain ports are so commonly associated with specific services that they're practically synonymous. Here are the ones you'll encounter on almost every engagement:</p>
+
+      <pre><code># Common TCP services
+21   FTP       – File Transfer Protocol (often misconfigured, anonymous access)
+22   SSH       – Secure Shell (remote login; brute-forceable if weak passwords)
+23   Telnet    – Unencrypted remote login (still alive on legacy systems)
+25   SMTP      – Email sending (open relays are a classic misconfiguration)
+53   DNS       – Domain Name System (zone transfers can leak network maps)
+80   HTTP      – Web traffic (unencrypted)
+443  HTTPS     – Web traffic (encrypted)
+445  SMB       – File sharing (EternalBlue anyone?)
+3306 MySQL     – Database (should NEVER be internet-facing)
+3389 RDP       – Remote Desktop Protocol (Windows remote access)
+8080 HTTP-alt  – Dev/proxy servers often live here
+
+# Common UDP services
+53   DNS
+67   DHCP
+161  SNMP      – Network device management (often default community strings)</code></pre>
+
+      <div class="callout warn"><strong>Port ≠ security:</strong> Moving a service to a non-standard port (like SSH on port 2222) is "security through obscurity" — it slows down automated scanners but provides no real protection. Always check the full port range.</div>
+
+      <h3>What makes a port interesting?</h3>
+      <p>An open port means something is listening. Something listening means there's software running. Software can have vulnerabilities. This chain — open port → service → version → vulnerability — is the core logic of network VAPT. The moment you see port 445 open on a Windows machine, your brain should immediately ask: <em>Is it patched? Is it exposed? Does it accept anonymous connections?</em></p>
+
+      <h3>Service states</h3>
+      <p>When you scan a port, it won't always be simply "open" or "closed." Nmap (which we'll meet shortly) reports three states:</p>
+
+      <pre><code>open     – Something is actively listening and accepting connections
+closed   – The port is reachable but nothing is listening right now
+filtered – A firewall is silently dropping packets; you can't tell if it's open or closed</code></pre>
+
+      <p>Filtered ports are frustrating but also informative — they suggest a firewall is doing its job, which narrows your attack surface and tells you something about the network's architecture.</p>
+
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <h2 id="recon">Reconnaissance with Nmap</h2>
+
+      <p>Here's where it gets real. <strong>Nmap</strong> (Network Mapper) is the industry-standard tool for network discovery and security auditing. It was created by Gordon Lyon (Fyodor) and first released in 1997 — and it's still the first tool a pentester reaches for, nearly three decades later. That's not nostalgia; it's because Nmap is genuinely excellent.</p>
+
+      <p>The official home is <a href="https://nmap.org" target="_blank" rel="noopener">nmap.org</a>. The <a href="https://nmap.org/book/man.html" target="_blank" rel="noopener">reference guide</a> lives there too — bookmark it now.</p>
+
+      <h3>How Nmap works</h3>
+      <p>At its core, Nmap sends crafted packets to a target and analyses the responses. The type of packet, the timing, and the interpretation of responses determine what Nmap learns. The default scan sends <strong>SYN packets</strong> (the first step of a TCP handshake) — if the port responds with SYN-ACK, it's open. If RST, it's closed. If nothing comes back, it's filtered.</p>
+
+      <h3>Your first scan</h3>
+      <p>Start simple. Given a target host, this is where you begin:</p>
+
+      <pre><code># Scan the 1000 most common ports on a single host
+nmap 10.10.10.5
+
+# Scan a whole subnet — discover what's alive
+nmap 10.10.10.0/24
+
+# Ping sweep only — just find live hosts, no port scanning
+nmap -sn 10.10.10.0/24</code></pre>
+
+      <p>The default scan is fast and gives you a solid overview. But pentesters rarely stop there.</p>
+
+      <h3>Going deeper with scan types</h3>
+
+      <pre><code># SYN scan (stealth scan) — faster, less likely to be logged
+# Requires root/administrator privileges
+sudo nmap -sS 10.10.10.5
+
+# TCP connect scan — full handshake, works without root
+nmap -sT 10.10.10.5
+
+# UDP scan — slower but reveals hidden services (DNS, SNMP, DHCP)
+sudo nmap -sU 10.10.10.5
+
+# Scan ALL 65535 ports — thorough, takes longer
+nmap -p- 10.10.10.5
+
+# Scan specific ports
+nmap -p 22,80,443,3306 10.10.10.5
+
+# Scan a port range
+nmap -p 1-1024 10.10.10.5</code></pre>
+
+      <div class="callout"><strong>Pro tip:</strong> Always run a full port scan (<code>-p-</code>) on targets that matter. Services hiding on high ports (like 8443, 8888, or 49152) are easy to miss with default scans and easy wins for attackers who do look.</div>
+
+      <h3>Service and version detection</h3>
+      
+      <p>Knowing that a port (eg: port 80/tcp) is open is useful. Knowing it's running <em>Apache</em> is better. But identifying that it's running <em>Apache 2.4.49</em> is actionable — because that specific version has a known critical vulnerability. Version detection is how you turn an open port into a real finding.</p>
+
+      <pre><code># Detect service versions on open ports
+nmap -sV 10.10.10.5
+
+# Detect OS (operating system fingerprinting)
+sudo nmap -O 10.10.10.5
+
+# The classic combo: version + OS + default scripts
+sudo nmap -sV -O -sC 10.10.10.5
+
+# Or use the shorthand "aggressive" scan (version + OS + scripts + traceroute)
+# Noisy! Use only when stealth doesn't matter.
+sudo nmap -A 10.10.10.5</code></pre>
+
+      <h3>Nmap Scripting Engine (NSE)</h3>
+      <p>Nmap's real superpower is its scripting engine. NSE scripts automate specific checks — testing for default credentials, detecting known vulnerabilities, pulling service banners, and more. There are over 600 built-in scripts.</p>
+
+      <pre><code># Run default scripts (safe and informative)
+nmap -sC 10.10.10.5
+
+# Run scripts for a specific category
+nmap --script=vuln 10.10.10.5        # Check for known vulnerabilities
+nmap --script=auth 10.10.10.5        # Test for default/empty credentials
+nmap --script=discovery 10.10.10.5   # Extra discovery checks
+
+# Run a specific script — check for anonymous FTP access
+nmap --script=ftp-anon 10.10.10.5 -p 21
+
+# Check if SMB is vulnerable to EternalBlue (MS17-010)
+nmap --script=smb-vuln-ms17-010 10.10.10.5 -p 445</code></pre>
+
+      <p>The full NSE script library is documented at <a href="https://nmap.org/nsedoc/" target="_blank" rel="noopener">nmap.org/nsedoc/</a> — searchable by category, protocol, and name.</p>
+
+      <h3>Output formats — save your work</h3>
+      <p>Always save scan output. Clients expect reports; you can't go back and re-scan everything later.</p>
+
+      <pre><code># Save output in all formats at once (normal, XML, and greppable)
+nmap -oA scan_results 10.10.10.0/24
+
+# Normal text output only
+nmap -oN scan.txt 10.10.10.5
+
+# XML output (for importing into tools like Metasploit or Nessus)
+nmap -oX scan.xml 10.10.10.5
+
+# Greppable format — great for piping to grep/awk
+nmap -oG scan.gnmap 10.10.10.5
+# Extract just the open ports:
+grep "open" scan.gnmap | awk '{print $2, $5}'</code></pre>
+
+      <div class="callout warn"><strong>Stay legal:</strong> Running Nmap against systems you don't own or have explicit written permission to test is illegal in most jurisdictions — even "just scanning." Always work in a lab environment, on your own machines, or with a signed scope document. Platforms like <a href="https://tryhackme.com" target="_blank" rel="noopener">TryHackMe</a> and <a href="https://hackthebox.com" target="_blank" rel="noopener">Hack The Box</a> give you legal targets to practice on.</div>
+
+      <h3>A real-world workflow</h3>
+      <p>Here's how a network VAPT typically kicks off — the first 20 minutes of scanning a new target range:</p>
+
+      <pre><code># Step 1: Quick ping sweep — find live hosts
+nmap -sn 10.10.10.0/24 -oG live_hosts.gnmap
+grep "Up" live_hosts.gnmap | awk '{print $2}' > live_ips.txt
+
+# Step 2: Fast scan of live hosts — top 1000 ports, with versions
+nmap -sV -iL live_ips.txt -oA fast_scan
+
+# Step 3: Full port scan on hosts of interest — catch anything missed
+nmap -p- -sV 10.10.10.5 -oA full_scan_10-10-10-5
+
+# Step 4: Targeted scripts based on what you found
+nmap --script=smb-vuln-ms17-010,smb-enum-shares 10.10.10.5 -p 445</code></pre>
+
+      <p>This is the rhythm: broad → narrow → targeted. You're funnelling from "what's out there" to "what can I do about it."</p>
+
+      <div class="callout"><strong>Note:</strong> Network scanning is not a one-time task. You have to run scan repeatedly, often at regular intervals to identify services hiding in the dark. The more you go through the cycle of Scanning → Documenting → Vulnerability Analysis, the better will be your findings.</div>
+
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <h2 id="tools">Ncat &amp; Nessus</h2>
+
+      <p>Nmap gives you the map. Two more tools round out your starter kit: <strong>Ncat</strong> for direct service interaction, and <strong>Nessus</strong> for comprehensive vulnerability scanning.</p>
+
+      <h3>Ncat — the Swiss Army knife</h3>
+      <p>Ncat is the modern, feature-rich successor to the classic <strong>Netcat</strong> (nc) — the tool so fundamental it's nicknamed "the Swiss Army knife of networking." It ships with the Nmap suite and lets you read and write raw data across network connections. It's humble but indispensable.</p>
+
+      <p>What can you do with Ncat? A lot:</p>
+
+      <pre><code># Connect to a service manually — banner grabbing
+# See exactly what a service says when you knock on its door
+ncat 10.10.10.5 80
+# Then type: GET / HTTP/1.0 [Enter][Enter]
+# You'll see the raw HTTP response, including the server version
+
+# Same for SSH — grab the banner without authenticating
+ncat 10.10.10.5 22
+# Output: SSH-2.0-OpenSSH_7.9 (or whatever version is running)
+
+# Test if a port is reachable (no tool installed? use ncat)
+ncat -zv 10.10.10.5 443
+# -z: scan mode (don't send data), -v: verbose
+
+# Set up a simple listener — wait for incoming connections
+ncat -lvp 4444
+# -l: listen, -v: verbose, -p: port
+
+# Transfer a file from target to attacker (in a lab)
+# On attacker machine (receiver):
+ncat -lvp 4444 > received_file.txt
+# On target machine (sender):
+ncat 10.10.10.1 4444 < file_to_send.txt</code></pre>
+
+      <div class="callout"><strong>Banner grabbing matters:</strong> Services often announce their name and version in a banner the moment you connect. Grabbing that banner manually with Ncat teaches you what automated tools see — and sometimes reveals things they miss, like custom error messages or misconfigured headers.</div>
+
+      <p>Ncat also supports SSL connections, proxy chaining, and acting as a simple HTTP server. As you go deeper into pentesting, you'll find yourself reaching for it constantly — especially when more sophisticated tools aren't available on a target system.</p>
+
+      <pre><code># Connect to HTTPS service
+ncat --ssl 10.10.10.5 443
+
+# Send UDP packets
+ncat -u 10.10.10.5 161   # SNMP port over UDP
+
+# Chat server in a pinch (two terminals, same network)
+# Terminal 1 (listener):
+ncat -lvp 5000
+# Terminal 2 (connector):
+ncat 127.0.0.1 5000</code></pre>
+
+      <h3>Nessus — the vulnerability scanner</h3>
+      <p>Where Nmap tells you what's open and what version is running, <strong>Nessus</strong> tells you what's <em>broken</em>. It's one of the most widely used vulnerability scanners in the world, built by Tenable. A free tier — <strong>Nessus Essentials</strong> — lets you scan up to 16 IP addresses, which is perfect for learning.</p>
+
+      <p>Download it from <a href="https://www.tenable.com/products/nessus/nessus-essentials" target="_blank" rel="noopener">tenable.com</a> and register for a free activation code. It runs as a local web application, so you access it through your browser after installation.</p>
+
+      <h3>How Nessus works</h3>
+      <p>Nessus runs a library of <strong>plugins</strong> — each one checks for a specific known vulnerability, misconfiguration, or security issue. The library is updated continuously and currently contains over 220,000 plugins. When you point Nessus at a target, it:</p>
+
+      <pre><code>1. Discovers live hosts (like nmap -sn)
+2. Identifies open ports and services (like nmap -sV)
+3. Runs relevant plugins against each service
+4. Assigns a severity score: Critical / High / Medium / Low / Info
+5. Generates a detailed report with remediation guidance</code></pre>
+
+      <h3>Running your first Nessus scan</h3>
+      <p>The workflow is GUI-based, but here's the conceptual flow:</p>
+
+      <pre><code># In the Nessus web UI (typically https://localhost:8834):
+1. New Scan → Basic Network Scan
+2. Set target: e.g. 192.168.1.0/24 or 10.10.10.5
+3. Set credentials (optional — credentialed scans go much deeper)
+4. Launch → wait for completion
+5. Review findings by severity</code></pre>
+
+      <p>A <strong>credentialed scan</strong> — where you give Nessus valid login credentials for the target systems — produces dramatically richer results. It can check for missing patches, insecure configuration files, weak permissions, and software vulnerabilities that are only visible from inside the system. For a VAPT engagement, you'll typically run both: uncredentialed (attacker's view) and credentialed (auditor's view).</p>
+
+      <div class="callout"><strong>Understanding CVSS scores:</strong> Nessus rates vulnerabilities using the <strong>CVSS</strong> (Common Vulnerability Scoring System) — a standardised 0–10 scale. A 9.8 is critical; a 2.1 is low severity. CVEs (Common Vulnerabilities and Exposures) are the unique identifiers — like <code>CVE-2021-44228</code> (Log4Shell). When Nessus flags a finding, always look up the CVE on <a href="https://nvd.nist.gov" target="_blank" rel="noopener">nvd.nist.gov</a> to understand the actual impact and available patches.</div>
+
+      <h3>Nmap + Nessus: better together</h3>
+      <p>Nmap and Nessus complement each other. Nmap is faster, more flexible, and gives you fine-grained control. Nessus is comprehensive and gives you structured vulnerability data with remediation advice. A common approach is to use Nmap for initial discovery and then feed the results into Nessus for deep analysis.</p>
+
+      <pre><code># Export Nmap results in XML, then import into Nessus
+nmap -sV -oX nmap_results.xml 10.10.10.0/24
+
+# In Nessus UI: New Scan → Advanced Scan
+# Under "Discovery" → "Import from Nmap" → upload nmap_results.xml
+# This skips Nessus's own discovery phase and jumps straight to vulns</code></pre>
+
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <h2 id="wrap">Wrap-up &amp; Resources</h2>
+
+      <p>You've covered the essentials of Network VAPT from first principles. Let's recap what you now carry in your head:</p>
+
+      <pre><code>✓ VAPT = Vulnerability Assessment + Penetration Testing
+✓ Networks are segmented into subnets using CIDR notation
+✓ Ports (0–65535) are how services listen for connections
+✓ TCP vs UDP — most services use TCP, but don't ignore UDP
+✓ Nmap discovers hosts, scans ports, detects versions, runs scripts
+✓ Ncat lets you interact directly with services (banner grabbing, file transfer)
+✓ Nessus automates vulnerability identification with a rich plugin library
+✓ The workflow: discover → enumerate → analyse → report</code></pre>
+
+      <p>This is the mental model that underpins every network pentest, from a small office to a Fortune 500 infrastructure. The tools scale; the thinking doesn't change.</p>
+
+      <h3>Practice environments</h3>
+      <p>Knowledge without practice is just trivia. Set up a safe lab and start scanning:</p>
+
+      <pre><code># Free legal practice platforms:
+TryHackMe       – https://tryhackme.com       (guided, beginner-friendly)
+Hack The Box    – https://hackthebox.com      (more challenging, community-driven)
+VulnHub         – https://vulnhub.com         (downloadable VMs to run locally)
+
+# Quick local lab with Docker (scan your own containers safely):
+docker run -d --name target vulnerables/web-dvwa
+nmap $(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' target)</code></pre>
+
+      <h3>Essential reading &amp; references</h3>
+      <pre><code>Nmap official docs      – https://nmap.org/book/man.html
+NSE script library      – https://nmap.org/nsedoc/
+Nmap Cheat Sheet        – https://nmap.org/book/nmap-options-summary.html
+OWASP Testing Guide     – https://owasp.org/www-project-web-security-testing-guide/
+Nessus Essentials       – https://www.tenable.com/products/nessus/nessus-essentials
+NVD (CVE database)      – https://nvd.nist.gov
+PTES (Pentest Standard) – http://www.pentest-standard.org/</code></pre>
+
+
+      <div class="callout"><strong>What's next?</strong> Anybody can run tools. Firewalls, IDS/IPS and SIEM tools are experts in identifying an Nmap/Nessus scans and alerting them or even blocking off the attacker. A good pentester starts off in stealth-mode. Before running a command, they know exactly how many packets will be sent, the type of packets, will it trigger any alarms etc. That's why there are levels to this "art" of hacking.</div>
+
+      <p style="font-size:.85rem;color:var(--fade);">Use the <span class="accent-cyan">arrows in the navbar</span> to go deeper into this topic - or sign up to unlock L1–L3.</p>
     </article>
   </div>
 </div>
@@ -133,5 +456,41 @@ nmap -p 22,139,445,3389 10.10.10.0/24
 
 <script src="../../assets/js/main.js"></script>
 <script src="../../assets/js/levels.js"></script>
+<script>
+(function () {
+  var sideLinks = document.querySelectorAll('.lesson-side a[href^="#"]');
+  if (!sideLinks.length) return;
+
+  var targets = Array.from(sideLinks).map(function (a) {
+    return document.querySelector(a.getAttribute('href'));
+  }).filter(Boolean);
+
+  // The threshold is just below the navbar — any heading above this
+  // line is considered "passed" and its section is the active one.
+  var THRESHOLD = 100;
+
+  function setActive(id) {
+    sideLinks.forEach(function (a) {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+    });
+  }
+
+  function update() {
+    // Walk through headings in order; the last one whose top edge
+    // has crossed the threshold is the section we're currently in.
+    // This works identically scrolling up or down.
+    var current = targets[0];
+    targets.forEach(function (el) {
+      if (el.getBoundingClientRect().top <= THRESHOLD) {
+        current = el;
+      }
+    });
+    setActive(current.id);
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  update(); // set correct state on page load
+})();
+</script>
 </body>
 </html>
