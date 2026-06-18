@@ -1,1 +1,732 @@
-No content.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Physical Red Teaming (L0) — Hack2Own</title>
+<meta name="description" content="Free L0 introduction to Physical Red Team Engagements. Learn methodology, OSINT, social engineering, lock bypass, RFID cloning, the Flipper Zero, Proxmark3, rules of engagement, and more." />
+<meta name="keywords" content="physical red team, physical penetration testing, social engineering, tailgating, lock picking, RFID cloning, Flipper Zero, Proxmark3, Hack2Own" />
+<link rel="canonical" href="https://hack2own.com/modules/physical/l0.html" />
+<meta name="robots" content="index, follow" />
+<meta property="og:title" content="Physical Red Teaming (L0) — Hack2Own" />
+<meta property="og:description" content="Free L0 introduction to Physical Red Team Engagements." />
+<meta property="og:url" content="https://hack2own.com/modules/physical/l0.html" />
+<meta property="og:image" content="https://hack2own.com/assets/img/og-cover.svg" />
+<meta property="og:type" content="article" />
+<link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../assets/css/style.css" />
+<style>
+  h2[id], h3[id] { scroll-margin-top: 80px; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "Physical Red Teaming (L0)",
+  "description": "Free L0 introduction to Physical Red Team Engagements.",
+  "provider": { "@type": "EducationalOrganization", "name": "Hack2Own", "sameAs": "https://hack2own.com" },
+  "isAccessibleForFree": true,
+  "educationalLevel": "Beginner"
+}
+</script>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../../index.html" class="brand"><span class="mark">H2O</span><span>Hack<b>2</b>Own</span></a>
+    <div class="lvl-nav" data-module="physical" data-level="0">
+      <button class="lvl-btn lvl-prev" aria-label="Go shallow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        <span class="tip">Go Shallow</span>
+      </button>
+      <div class="lvl-display"></div>
+      <button class="lvl-btn lvl-next" aria-label="Go deeper">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        <span class="tip">Go Deeper</span>
+      </button>
+    </div>
+    <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="../../index.html#modules">Modules</a></li>
+      <li><a href="../../pages/pricing.html">Pricing</a></li>
+      <li><a href="../../pages/faq.html">FAQ</a></li>
+      <li><a href="../../pages/locked.html?module=physical&level=1" class="btn btn-primary">Sign Up →</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="lesson">
+    <aside class="lesson-side">
+      <h4>Module 10 · L0</h4>
+      <ul>
+        <li><a href="#intro" class="active">What is Physical Red Teaming?</a></li>
+        <li><a href="#pre">Before You Move</a></li>
+        <li><a href="#recon">Reconnaissance</a></li>
+        <li><a href="#entry">Gaining Entry</a></li>
+        <li><a href="#tools">The Physical Toolkit</a></li>
+        <li><a href="#wrap">Wrap-up &amp; Resources</a></li>
+      </ul>
+    </aside>
+
+    <article class="prose">
+      <span class="eyebrow">// module 10 · physical red team</span>
+      <h1>Physical Red Teaming</h1>
+      <p style="font-size:1.05rem;">The most hardened firewall in the world cannot stop someone who walks through the front door. Physical red teaming is the discipline of testing that assumption — before someone with worse intentions tests it for you.</p>
+
+
+      <h2 id="intro">What is Physical Red Teaming?</h2>
+
+      <p>In September 2019, two security consultants from Coalfire Labs were arrested at an Iowa county courthouse at 11 p.m. They had picks in their pockets, were dressed in black, and had just bypassed two locks on restricted doors. They also had signed contracts, a valid letter of authorisation, and every legitimate right to be there. The county sheriff had never been informed. They spent the night in jail.</p>
+
+      <p>That story captures something essential about physical red teaming: it is real-world work with real-world consequences, operating in a space where security testing and criminal activity are genuinely indistinguishable from the outside. Understanding how to do it properly — legally, ethically, and effectively — starts with understanding what it actually is.</p>
+
+      <p>A <strong>Physical Red Team engagement</strong> is an authorised simulation of a real-world adversary attempting to gain unauthorised physical access to a facility, restricted area, or sensitive asset. Unlike a network scan or a web application test — both done from a keyboard — physical red teaming puts operators on the ground: in car parks, reception lobbies, server rooms, and executive suites.</p>
+
+      <h3>What makes it different from a penetration test?</h3>
+      <p>Penetration testing is scope-driven: find every vulnerability in <em>this specific system</em>. Physical red teaming is objective-driven: achieve <em>this specific goal</em> — reach the server room, access a filing cabinet, plant a device on the internal network — using whatever realistic, approved means work. The methodology is closer to how a real attacker operates: patient, adaptive, opportunistic, and blended across technical and human vectors simultaneously.</p>
+
+      <pre><code>Penetration Test    →  "Find all vulnerabilities in this building's
+                        access control system."
+
+Physical Red Team   →  "Get into the server room and photograph the
+                        rack labels. Use any approved means."
+
+The difference:
+PT finds issues.    RT demonstrates impact.
+PT is comprehensive.   RT is realistic.
+PT tests controls.  RT tests people + process + technology together.</code></pre>
+
+      <h3>What is actually being tested?</h3>
+      <p>Physical red teaming exposes three failure modes that no digital scan can detect:</p>
+
+      <p><strong>People failures</strong> — an employee who holds a door open for someone carrying boxes because it seems rude not to. A receptionist who doesn't ask for ID because the visitor mentioned the CEO's name. A guard who waves through anyone wearing a high-visibility vest. These are not failures of character; they are failures of training, culture, and habit.</p>
+
+      <p><strong>Process failures</strong> — visitor logs that aren't checked, contractor badges that aren't deactivated when a job ends, server room access that's never been audited, tailgating policies that exist on paper but are never enforced.</p>
+
+      <p><strong>Technology failures</strong> — RFID cards running outdated protocols that can be cloned in under a second, door sensors that a can of compressed air can trigger from outside, locks that haven't been upgraded since the building opened in 1998.</p>
+
+      <div class="callout"><strong>The uncomfortable truth:</strong> Organisations routinely spend millions on firewalls, endpoint detection, and SIEM platforms — then leave a server room accessible via a standard pin-tumbler lock that a competent picker opens in under a minute. Physical red teaming finds exactly these gaps, the ones that don't appear on any vulnerability dashboard.</div>
+
+
+      <h2 id="pre">Before You Move</h2>
+
+      <p>This section comes before reconnaissance, before tools, before techniques — because without the legal and operational groundwork it covers, you are not a red teamer. You are a criminal. The scaffolding of a physical engagement is non-negotiable, and understanding it is a core professional skill.</p>
+
+      <h3>Rules of Engagement (RoE)</h3>
+      <p>The <strong>Rules of Engagement</strong> is the governing document of the entire operation. It defines what the red team is authorised to do, what is explicitly off-limits, who knows the engagement is happening, and what to do when things go wrong. Every party signs it before any operator sets foot near the target. A thorough RoE answers:</p>
+
+      <pre><code>Scope
+  ├── Which facilities are in scope? (specific building addresses, floors)
+  ├── Which are explicitly out of scope? (data centre B, the executive floor)
+  └── Which techniques are approved? (tailgating / badge cloning / lock bypass)
+
+Timing
+  ├── Start and end date of the engagement
+  ├── Permitted testing hours (business hours? after-hours? both?)
+  └── Blackout periods (product launches, board meetings, audits)
+
+People
+  ├── The "white team": small group of senior client staff who know — keep it minimal
+  ├── Emergency contacts if an operator is detained (reachable 24/7)
+  └── Escalation path if something seriously unexpected occurs
+
+Hard Limits
+  ├── No destructive force — never break a lock or damage property
+  ├── No photographing individuals without consent
+  ├── Minimal data exposure — confirm access, never exfiltrate real PII
+  └── Stop conditions — what triggers an immediate abort</code></pre>
+
+      <div class="callout warn"><strong>The Coalfire lesson:</strong> The two consultants arrested in Iowa had a signed letter of authorisation from the county attorney — but the local sheriff's office was never informed. The sheriff considered the courthouse county property belonging to Iowa taxpayers, not the attorney's to authorise. Moral: in physical engagements, identify every authority with jurisdiction over the space. A contract with the CEO does not automatically protect you with local law enforcement. Coordinate with all relevant parties — including building security, facilities management, and where applicable, local police liaison.</div>
+
+      <h3>The Get-Out-of-Jail Letter</h3>
+      <p>Every physical operator carries a <strong>letter of authorisation</strong> — the Get-Out-of-Jail (GoJ) letter — on their person for the entire engagement. This is not a formality; it is the difference between a misunderstanding and an arrest record.</p>
+
+      <pre><code># A GoJ letter must contain:
+- Full legal name of the authorising organisation
+- Names and physical descriptions of all authorised operators
+- Exact date range of the engagement
+- Scope summary: facilities and approved activities in plain language
+- Emergency contact: a named senior executive (CISO, COO, or above)
+  with a direct mobile number — reachable 24/7 during the engagement
+- Signature and title of the authorising executive
+- Company letterhead, seal, or stamp
+
+# Critical operational points:
+- The emergency contact MUST answer their phone.
+  An operator being detained at 2 a.m. cannot wait until Monday.
+- The highest-level signatory possible. "Head of Facilities" may not
+  satisfy a police officer. "Chief Information Security Officer" carries weight.
+- Carry a physical printed copy — don't rely solely on a phone screen.
+- Keep an encrypted digital backup accessible to team leads remotely.
+- Test the emergency contact number before the engagement begins.</code></pre>
+
+      <h3>Scope and the white team</h3>
+      <p>The <strong>white team</strong> is the small group of senior client personnel who know the engagement is active. Keeping this group small preserves realism — if every employee knows fake intruders might appear, they behave differently, and the test loses its value. But someone must be reachable if an operator is detained, a genuine security incident occurs during the window, or a decision needs to be made in the field.</p>
+
+      <p>A critical principle: physical red teaming excludes certain actions regardless of what is in scope. You do not threaten employees. You do not damage property. If the objective is demonstrating access to the server room, a timestamped photograph of the rack labels is conclusive proof — you do not need to download data or tamper with equipment to make the point.</p>
+
+      <pre><code># Engagement phase flow:
+
+1. Scoping and RoE signing          ─ Weeks before
+2. Remote OSINT reconnaissance      ─ 1-2 weeks before
+3. Physical surveillance            ─ Days before (anonymous observation)
+4. Active engagement execution      ─ The agreed window
+5. Immediate debrief                ─ Within 24 hours of completion
+6. Full written report              ─ 1-2 weeks post-engagement
+7. Remediation review / retest      ─ Weeks to months later</code></pre>
+
+
+      <h2 id="recon">Reconnaissance</h2>
+
+      <p>Physical red teaming is won and lost in reconnaissance. The operators who walk confidently into a building and blend seamlessly with its environment didn't get lucky — they spent days learning how that building works before they ever approached it. Recon divides into two phases: <em>remote</em> (done from a desk, leaves zero footprint) and <em>physical</em> (done on location, requires careful execution).</p>
+
+      <h3>Remote OSINT: what public information reveals</h3>
+      <p>An organisation leaks a surprising volume of intelligence about its physical environment through publicly available channels. A competent red team constructs a detailed operational picture before coming within a mile of the target:</p>
+
+      <pre><code># Corporate website and LinkedIn
+- Identify key personnel: receptionists, facilities managers, IT staff,
+  security team. LinkedIn often includes headshots — useful for knowing
+  who might challenge you and what a "legitimate employee" looks like.
+- Job postings reveal technology in use:
+  "Experience with Lenel OnGuard access control required" tells you
+  the badge reader brand before you ever approach the building.
+- Employee posts and office photos reveal badge lanyard designs,
+  interior layouts, and dress code.
+
+# Google Maps and Street View
+- Satellite view: map all entrances, car parks, delivery bays,
+  smoking areas (prime social engineering entry points), CCTV coverage.
+- Street View: often shows reception through glass frontage,
+  visitor parking signs, and badge reader models on exterior doors.
+- The delivery bay is almost always less secure than the front entrance.
+
+# Planning documents and building permits (public records)
+- Filed planning applications sometimes include floor plans.
+- Real estate listings for previously vacant floors may reveal
+  interior layouts — server rooms, comms rooms, stairwell positions.
+
+# Company social media
+- Instagram, LinkedIn, Facebook "our new office" posts reveal:
+  Badge lanyard colours and designs (reference for fabrication)
+  Actual employee dress code
+  Interior layout, CCTV camera positions, desk arrangements
+  Whether doors use keypads, RFID readers, or both
+
+# Shodan for internet-exposed building infrastructure
+- IP cameras, badge readers, and building management systems
+  left internet-accessible without authentication are alarmingly common.
+  shodan.io → search: org:"Target Company Name"
+  Look for Hikvision, Dahua, Genetec, Honeywell building systems.</code></pre>
+
+      <div class="callout"><strong>Dress code is operational intelligence.</strong> Arriving at a smart-formal financial services firm in construction clothes, or walking into a casual tech startup in a suit and tie, marks you as out of place within seconds. LinkedIn, company culture pages, and Instagram almost always show what employees actually wear. Match the environment exactly — including bag type, lanyard, and whether people carry laptops or tablets.</div>
+
+      <h3>Physical surveillance</h3>
+      <p>Before the active window, operators observe the target on-site — anonymously, from a distance. A parked car, a nearby café, or a public pavement are legitimate vantage points. Nothing happens that could be construed as approaching the target:</p>
+
+      <pre><code># What you are watching for over multiple observation sessions:
+
+Entry and exit patterns
+  - When is the morning rush? (8:45–9:15 is typically peak tailgating opportunity)
+  - Do employees badge in individually or flow through in groups?
+  - Which entrance is least monitored?
+
+Smoking areas and side doors
+  - Small groups leaving and re-entering a side door repeatedly
+  - These doors are often propped, rarely monitored, and bypassed constantly
+
+Delivery patterns
+  - Regular courier windows create natural cover for impersonation
+  - Delivery drivers are often waved through with minimal authentication
+
+Badge reader identification
+  - What brand and model are the external readers?
+  - HID, Paxton, Allegion? This determines your cloning hardware
+  - Low readers on a door frame are usually 125 kHz
+  - Wall-mounted black pucks are often 13.56 MHz
+
+Guard and reception patterns
+  - When do shift changes happen? (distraction window)
+  - Do guards rotate? Is there a period with no desk coverage?
+  - How does the visitor check-in process work from the outside?
+
+Contractors and maintenance staff
+  - What do they look like? Uniform colours? Van types?
+  - Are they challenged or waved through?</code></pre>
+
+      <h3>Building the target profile</h3>
+      <p>Recon ends when the team can answer these questions with confidence. Before any operator moves, the picture should be complete:</p>
+
+      <pre><code>✓ How many entrances exist, and which is least monitored?
+✓ What access control technology is in use (badge type, keypad model)?
+✓ What is the full visitor experience from car park to target floor?
+✓ What pretexts fit this specific environment?
+✓ What does an employee look like — dress, badge colour, lanyard?
+✓ What does the target area look like internally?
+✓ What are the guard and reception staffing patterns?
+✓ What is the realistic alarm and response time if triggered?</code></pre>
+
+
+      <h2 id="entry">Gaining Entry</h2>
+
+      <p>Entry techniques split into two categories: <strong>social engineering</strong> (bypassing people) and <strong>physical bypass</strong> (bypassing hardware). The most successful engagements combine both — a cloned badge opens the door; a convincing persona keeps you inside once you're through it.</p>
+
+      <h3>Tailgating and piggybacking</h3>
+      <p>Tailgating is the simplest and most reliably successful physical technique. An unauthorised person follows an authorised person through a secured entrance without independently authenticating. Most employees will hold a door for someone who looks like they belong — especially if that person appears occupied and in a hurry. This is not a failure of character; it is deeply ingrained social conditioning against being impolite.</p>
+
+      <pre><code># What makes tailgating work:
+
+Timing
+  The 8:45–9:15 AM rush is the prime window. People are hurrying
+  in from the car park with coffee in hand, running slightly late,
+  and not suspicious of anyone else doing the same.
+
+Hands full
+  Carrying boxes, a coffee tray, or bags signals "clearly an employee."
+  People don't just hold doors — they go out of their way to help.
+
+The phone call
+  Being audibly mid-conversation ("I'll be up in two minutes...")
+  implies you are already known to someone inside.
+
+Blending into groups
+  Approaching the door just as a larger group is entering means
+  you're swept through in the social current. Nobody counts heads.
+
+The ready pretext for challenges
+  "I left my badge upstairs — I hate Mondays."
+  Disarming, relatable, completely unverifiable.
+  Have a secondary pretext ready for follow-up questions.</code></pre>
+
+      <h3>Pretexting</h3>
+      <p>Pretexting is the construction of a believable scenario that justifies your presence without requiring verification. The best pretexts are specific, match the target environment from recon, and are structured so that the person being deceived has no easy way to check them. They need to feel right — not be provable.</p>
+
+      <pre><code># Pretexts that work — and why:
+
+IT support / infrastructure check
+  "Hi, we've had reports of intermittent network issues on this floor —
+  I just need to check the comms cabinet, should take five minutes."
+  WHY: IT visits are routine and expected. Employees don't know
+  every IT staff member. The task sounds specific and short.
+
+Maintenance contractor
+  Wear appropriate clothing. Carry a clipboard and a printed work order
+  (forged from OSINT on the facilities management company's documents).
+  WHY: Contractors access restricted areas constantly.
+  People are conditioned not to interfere with tradespeople working.
+
+Fire safety / regulatory inspection
+  A high-visibility vest and a clipboard. "We're conducting the annual
+  fire safety audit on behalf of [local authority from OSINT]."
+  WHY: Regulatory inspectors carry implicit authority.
+  Challenging an inspector feels like obstructing compliance.
+
+Courier / delivery
+  Carry a parcel addressed to a real recipient (from OSINT / LinkedIn).
+  "I need a signature from someone in IT — can I wait inside?"
+  WHY: Deliveries are routine, the request is reasonable, and it gets
+  you past the reception desk into the building.</code></pre>
+
+      <div class="callout"><strong>Confidence is the master key.</strong> Every experienced physical operator says the same thing: the single biggest factor in whether you are challenged is whether you look like you belong. Moving with purpose, brief natural eye contact, no hesitation at doors — these signal membership. Hesitation signals the opposite. Confidence is not arrogance; it is calmness, familiarity, and the absence of furtive behaviour.</div>
+
+      <h3>Physical bypass techniques</h3>
+      <p>Some entry points are unattended — no guard, no receptionist, just a locked door. Physical bypass skills handle these situations. The principle: always start with the least invasive technique. Leave no trace. Never damage anything.</p>
+
+      <p><strong>Under-door tools (UDT)</strong> work on any door where the internal release mechanism is a lever handle, push bar, or crash bar. A thin, flexible tool is slid under the door gap and manipulated to depress the internal handle, opening the door from outside without any key or access credential:</p>
+
+      <pre><code># Under-door tool overview:
+
+Works on:     Lever handles, push bars, crash bars
+              (the internal mechanism that a person inside uses to exit)
+Does not work: Deadbolts, double-locked doors, doors with no floor gap
+
+Typical targets:
+  - Internal restricted-area doors (server room inside an already-accessed floor)
+  - Stairwell doors locked from outside but with lever handles inside
+  - After-hours office building doors
+
+The floor gap:
+  Most commercial doors have 1–2 cm of clearance from the floor —
+  sufficient for the standard UDT hook tool.
+
+Key advantage: non-destructive, leaves no mark, extremely fast once practised.</code></pre>
+
+      <p><strong>Lock picking</strong> manipulates the internal pins of a pin-tumbler lock to the shear line without the correct key. It requires practice — genuine, consistent practice on real locks under realistic conditions:</p>
+
+      <pre><code># The three main approaches:
+
+Single Pin Picking (SPP)
+  Each pin set individually with a hook pick while maintaining
+  rotational tension on the plug. Slow, methodical, reliable.
+  The correct approach for higher-quality locks.
+
+Raking
+  A serrated pick moved rapidly back and forth while applying tension.
+  Sets multiple pins stochastically. Fast but imprecise.
+  Works well on low-security locks. Audible compared to SPP.
+
+Bump Keys
+  A specially cut key struck with a mallet while applying light
+  rotational tension. Causes all pins to jump past the shear line
+  simultaneously. Very fast when it works.
+  Requires the correct blank for the target lock brand.
+
+# The field reality:
+Picking under stress — in public, observed, time-pressured — is
+dramatically harder than at a quiet practice bench.
+Skills that work easily at home can fail completely on a live engagement.
+Never make lock picking your sole entry plan. Always have a social
+engineering backup.</code></pre>
+
+      <p><strong>Spring-latch bypass</strong> works on the most common commercial door latch — the spring-loaded tongue that retracts automatically when a door closes. Unlike a deadbolt, it can be retracted by sliding a flexible tool between door and frame:</p>
+
+      <pre><code># Tools for spring-latch bypass:
+Shove knife / latch bypass tool
+  Thin flexible blade inserted at the latch angle and levered inward
+  to retract the spring tongue. Fast and clean on poorly installed doors.
+
+Loider / mica bypass sheet
+  Thin acetate sheet on inward-opening spring-latch doors.
+
+Does NOT work on:
+  - Deadbolts (require picking)
+  - Mag-locks (require power interruption or REX attack)
+  - Well-installed doors with anti-shim strikes
+
+# REX (Request-to-Exit) sensor attacks:
+Many secure doors auto-open when someone approaches from the inside —
+a PIR motion sensor triggers the door release to let occupants exit.
+An inverted compressed-air canister sprays a freezing burst that can
+trigger temperature-sensitive PIR sensors from outside, through a door
+gap — opening the door without any tool contact with the lock.
+This has been used successfully against data centre doors in real engagements.</code></pre>
+
+      <div class="callout warn"><strong>Destructive bypass is always out of scope.</strong> Kicking doors, breaking glass, cutting cables — any technique that leaves visible evidence of forced entry — is off the table. The objective is demonstrating that access was possible, not proving it through destruction. Destructive entry also dramatically escalates consequences if law enforcement becomes involved. If you cannot bypass a door non-destructively, you document it as a control that is working and move on.</div>
+
+
+      <h2 id="tools">The Physical Toolkit</h2>
+
+      <p>A well-equipped physical red teamer carries a toolkit that bridges electronics, hardware, and covert tradecraft. What you carry is determined by what recon revealed — you do not bring every tool on every job. Here is what the field actually looks like.</p>
+
+      <h3>RFID and badge cloning</h3>
+      <p>The majority of modern access control systems are RFID-based. An employee taps their badge to a reader; the reader checks the credential; the door opens. The vulnerability: most legacy systems broadcast those credentials with little or no encryption, to any device that asks. You can clone a badge without the owner's knowledge in under a second.</p>
+
+      <p>Two frequencies dominate the corporate access control market:</p>
+
+      <pre><code># Low Frequency (125 kHz) — the legacy standard
+  Common systems: HID Prox, EM4100/4200, Indala, Awid
+  Encryption: typically NONE — credentials broadcast in plaintext
+  Cloning difficulty: trivial with basic hardware
+  Read range: 5–15 cm standard; 1+ metre with long-range antenna
+
+# High Frequency (13.56 MHz) — NFC-era, security varies enormously
+  Common systems: MIFARE Classic, MIFARE DESFire, HID iClass, Seos
+  Security:
+    MIFARE Classic: 48-bit keys, often factory-default — easily cracked
+    MIFARE DESFire EV2+: AES-128 encryption — extremely resistant
+    HID iClass SE / Seos: modern standard — typically not clonable
+  Read range: 2–5 cm
+
+# The field reality:
+# An estimated 70–80% of deployed corporate access control systems
+# still run 125 kHz or weakly configured 13.56 MHz — trivially clonable.
+# A significant portion of Fortune 500 buildings can be entered
+# with nothing more than a Flipper Zero and thirty seconds near
+# an employee's badge.</code></pre>
+
+      <h3>Flipper Zero</h3>
+      <p>The <strong>Flipper Zero</strong> is the entry point for every physical red teamer working with wireless signals. It is a pocket-sized, open-source multi-tool handling RFID (125 kHz and 13.56 MHz), NFC, Sub-GHz radio (300–928 MHz), infrared, BadUSB, and GPIO expansion — all in a device that fits comfortably in a jacket pocket and costs around $170. It went viral in 2022 for good reason: it made previously specialist RFID attacks accessible to any practitioner.</p>
+
+      <pre><code># Flipper Zero — what it does in the field:
+
+Reads and clones most 125 kHz badges (HID Prox, EM4100) instantly
+Attacks MIFARE Classic cards with default or known sector keys
+Stores multiple cloned credentials for later replay
+Emulates cloned badge directly from the device — no blank card needed
+Sub-GHz capture: garage doors, gate fobs, older wireless protocols
+IR transmitter: can disable poorly secured IP cameras and monitors
+BadUSB: plug into an unattended locked workstation → automated keyboard
+  injection can bypass screen locks in some configurations
+
+# Its limits:
+Short read range on HF (2–3 cm); modest on LF (5–8 cm)
+Cannot crack DESFire EV2/EV3, modern iClass SE, or Seos
+Slower key cracking on MIFARE Classic vs Proxmark3
+
+# Firmware: install Unleashed or RogueMaster for full capability
+# Unleashed: https://github.com/DarkFlippers/unleashed-firmware
+# Flash via qFlipper app: https://flipperzero.one/update</code></pre>
+
+      <h3>Proxmark3 RDV4</h3>
+      <p>The <strong>Proxmark3 RDV4</strong> is the professional-grade RFID research and attack platform. If the Flipper Zero is the Swiss Army knife, the Proxmark3 is the surgeon's kit — more capable, more complex, essential when targets exceed what the Flipper can handle. At ~$300–400, it is a significant investment with a steep learning curve. It earns its place when you need it.</p>
+
+      <pre><code># Proxmark3 RDV4 — distinguishing capabilities:
+
+Long-range LF antenna: clone 125 kHz badges from 15–30 cm
+  (sufficient to skim a badge on someone's belt as you pass them)
+Hardnested / nested attacks: cracks non-default MIFARE Classic keys
+  that Flipper cannot — the difference between "partial read" and
+  "full credential clone"
+Standalone mode: clone up to 4 cards with no laptop needed
+  (stored in volatile memory — lost on power-off, but fast in the field)
+Connected mode: full capability via USB or Bluetooth module
+
+# Setup:
+git clone https://github.com/RfidResearchGroup/proxmark3.git
+cd proxmark3 && make all && sudo make install
+
+# Common field commands:
+pm3 > lf search            # Auto-detect and read any LF badge
+pm3 > lf hid clone -r &lt;rawid&gt;  # Clone HID credential to T5577 blank
+pm3 > hf mf autopwn       # Full auto-attack against MIFARE Classic
+pm3 > hf search            # Auto-detect HF card type and read
+
+# The badge-on-the-belt technique:
+Operator palms the PM3, long-range antenna extended, positioned
+casually at hip height. Walks within 15–30 cm of a target whose
+badge is clipped to their belt or worn on a lanyard. The read is
+passive and silent. The target notices nothing.</code></pre>
+
+      <h3>Lock picking kit</h3>
+      <p>A standard physical red team carry includes a basic lock picking kit. Most commercial buildings use low-security pin-tumbler locks that open with modest practice. The goal is competence under field conditions, not competition-level mastery:</p>
+
+      <pre><code># A practical starter kit:
+Short hook pick          — Single pin picking; most versatile
+City rake / snake rake   — Fast raking on low-security locks
+Bogota rake              — Aggressive raking; good all-rounder
+Tension wrenches (x2)    — Light and medium; the most critical skill
+  (Correct tension application accounts for ~80% of picking success)
+
+# Supplementary physical bypass tools:
+Bump keys (matched to common lock brands in your region)
+Shove knife / latch bypass tool
+Under-door tool (UDT) kit with extendable hook
+Loider / mica bypass sheets
+
+# Where to practise legally:
+TOOOL chapters (The Open Organisation Of Lockpickers)
+  https://toool.us  |  https://toool.nl
+  Local meetups, free training, legal practice
+Sparrows Lock Picks — quality picks and transparent cutaway locks
+  https://www.sparrowslockpicks.com
+DEF CON Lockpick Village — annual, Las Vegas, free with badge</code></pre>
+
+      <h3>Network implants — bridging physical to digital</h3>
+      <p>A physical access without a digital consequence is a half-story. The most impactful physical red team engagements demonstrate the complete attack chain: get inside → plant a device → own the network. Network implants make that chain concrete and reportable:</p>
+
+      <pre><code># LAN Turtle (Hak5) — https://hak5.org/products/lan-turtle
+  Disguised as a USB ethernet adapter.
+  Sits between a workstation and its ethernet port.
+  Provides persistent reverse SSH tunnel to operator's C2 server.
+  The workstation owner has no visible indication it's there.
+  Cost: ~$60
+
+# Shark Jack (Hak5) — https://hak5.org/products/shark-jack
+  Pocket-sized ethernet attack tool.
+  Plug into any live ethernet port (printer, conference room AV,
+  unattended desk) and run automated network recon in seconds.
+  Outputs results for later analysis.
+
+# Raspberry Pi Zero 2W — ~$15
+  Tiny SBC running Kali Linux or a custom payload.
+  Can be configured as a persistent network implant, Wi-Fi beacon,
+  or reverse shell client. Small enough to tape behind a desk.
+  Power via USB from any nearby charger or unused USB port.
+
+# What these demonstrate:
+"I entered your building" is one finding.
+"I entered your building, planted a device on your internal network,
+and maintained remote access for the next 72 hours undetected"
+is a finding that gets boardroom attention and budget approved.</code></pre>
+
+      <h3>Operational kit and social engineering props</h3>
+      <pre><code># Documentation and evidence
+- Small bodycam / action camera for timestamped evidence (critical for reports)
+- Smartphone with offline maps (no cellular dependency during the op)
+- Compact camera for photographing locks, readers, rack labels, whiteboards
+
+# Social engineering props
+- Printed work order or inspection checklist (designed from OSINT)
+- Clipboard (the near-universal "authorised person" signal)
+- High-visibility vest (transforms perception in most building environments)
+- Fabricated ID badge (reference badge design from recon observation)
+- Earpiece (looks like a Bluetooth headset; enables silent team comms)
+
+# Operational security
+- Faraday pouch for personal devices (prevent unintended RF emissions
+  that could interfere with your cloning hardware)
+- Clean laptop with no personal data for any on-site digital activity
+- Disposable / dedicated phone for engagement comms only
+- Printed GoJ letter — physical paper, not just a phone screen</code></pre>
+
+      <div class="callout"><strong>Hak5</strong> at <a href="https://hak5.org" target="_blank" rel="noopener">hak5.org</a> produces the most widely used network implants in physical red team work — LAN Turtle, Shark Jack, and the O.MG Cable (a charging cable with a built-in implant). Their YouTube channel and documentation are genuinely excellent for understanding operational use.</div>
+
+
+      <h2 id="wrap">Wrap-up &amp; Resources</h2>
+
+      <p>Physical red teaming is the widest of all security testing disciplines — spanning OSINT, social psychology, electronics, locksmithing, operational security, and performance under pressure. Here is everything this module covered, condensed:</p>
+
+      <pre><code>✓ Physical RT tests people + process + technology in combination
+✓ Rules of Engagement and the GoJ letter are prerequisites, not formalities
+✓ The Coalfire case: always coordinate with all parties who have jurisdiction
+✓ Recon (remote OSINT + physical surveillance) wins engagements before
+  the active phase begins
+✓ Social engineering (tailgating, pretexting, impersonation) is statistically
+  the most reliable entry vector in most environments
+✓ Physical bypass (UDT, lock picking, latch attacks, REX sensor abuse)
+  handles unattended entry points without social engineering
+✓ 125 kHz RFID (HID Prox, EM4100) is trivially clonable
+  Flipper Zero handles ~90% of cases; Proxmark3 RDV4 handles the rest
+✓ DESFire EV2+, iClass SE, and Seos credentials resist consumer cloning tools
+✓ Network implants (LAN Turtle, RPi) bridge physical access to digital compromise
+✓ Timestamped documentation is what converts a story into a professional report</code></pre>
+
+      <h3>Essential reading</h3>
+      <pre><code>Unauthorised Access: Physical Penetration Testing for IT Security Teams
+  — Wil Allsopp
+  The definitive operational guide. Full engagement lifecycle with
+  real-world tradecraft. Start here.
+
+The Art of Intrusion — Kevin Mitnick
+  True stories of social engineering and physical intrusion.
+  Reads like fiction; the tradecraft lessons are genuine.
+
+Practical Lock Picking: A Physical Penetration Tester's Training Guide
+  — Deviant Ollam
+  The standard reference for lock mechanics, picking technique,
+  and the psychology of physical security.
+
+Keys to the Kingdom — Deviant Ollam
+  Bumping, impressioning, master key privilege escalation,
+  and key-based attacks against physical access systems.</code></pre>
+
+      <h3>Online resources and communities</h3>
+      <pre><code>Deviant Ollam talks (YouTube / DEF CON archive)
+  Search "Deviant Ollam physical security" — all free
+  Essential viewing before any physical engagement.
+
+TOOOL — The Open Organisation Of Lockpickers
+  https://toool.us  |  https://toool.nl
+  Chapters worldwide, free meetups and legal practice.
+
+Raxis PSE and Red Team Blog Series
+  https://raxis.com/blog
+  Practitioner-written field reports: badge cloning, UDT use,
+  social engineering in real engagements.
+
+Covert Access Team (Substack)
+  https://covertaccessteam.substack.com
+  RFID tool comparisons and field tradecraft — honest benchmarks
+  of Flipper Zero vs Proxmark3 vs iCopy-X on real readers.
+
+Red Team Guide — Joe Vest and James Tubberville
+  https://redteam.guide
+  Operational methodology, RoE templates, and checklists.
+
+Hak5 Documentation and YouTube
+  https://hak5.org  |  youtube.com/@hak5darren
+  LAN Turtle, Shark Jack, implant deployment tutorials.
+
+DEF CON Physical Security Village
+  https://www.physec.village
+  Annual, free with DEF CON badge — talks, Lockpick Village,
+  and the best practitioner community in the field.</code></pre>
+
+      <h3>Legal practice environments</h3>
+      <pre><code># Lock picking — legal everywhere on locks you own
+Sparrows Lock Picks: https://www.sparrowslockpicks.com
+LockPickWorld: https://lockpickworld.com
+Buy a transparent cutaway lock first — see the mechanism, build the feel.
+
+# RFID cloning — legal on systems you own or are authorised to test
+Buy a pack of blank T5577 (LF) and MIFARE Classic 1k (HF) cards.
+Clone your own access card at home. Understand the mechanism before
+you need to execute it under pressure in the field.
+
+# Social engineering
+Social Engineer.org: https://www.social-engineer.org
+SANS Social Engineering resources — free whitepapers and frameworks
+
+# CTF events with physical components
+DEF CON Physical Security Village — annual, Las Vegas
+BSides conferences — many run physical security competitions locally</code></pre>
+
+      <div class="callout"><strong>What's next?</strong> In L1, you build the skills hands-on: picking real locks under time pressure, cloning a 125 kHz badge from scratch with Flipper Zero, constructing and rehearsing a pretext scenario, and planting a LAN Turtle on an isolated lab network to establish persistent remote access. Physical red teaming is learned in the body, not just in the mind — L1 is where the practice begins.</div>
+
+      <p style="font-size:.85rem;color:var(--fade);">Use the <span class="accent-cyan">arrows in the navbar</span> to change depth — or sign up to unlock L1–L3.</p>
+    </article>
+  </div>
+</div>
+
+<!-- ===== FOOTER (shared markup) ===== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a href="index.html" class="brand"><span class="mark">H2O</span><span>Hack<b>2</b>Own</span></a>
+        <p class="tagline">Learn to hack. Then own it. A hands-on pentest school born in Kerala, built for India.</p>
+      </div>
+      <div>
+        <h5>Learn</h5>
+        <ul>
+          <li><a href="index.html#modules">Modules</a></li>
+          <li><a href="index.html#tiers">Tiers</a></li>
+          <li><a href="pages/pricing.html">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Platform</h5>
+        <ul>
+          <li><a href="pages/about.html">About us</a></li>
+          <li><a href="pages/faq.html">FAQ</a></li>
+          <li><a href="pages/locked.html?level=1">Sign up</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="pages/faq.html#ethics">Ethics &amp; use</a></li>
+          <li><a href="mailto:hello@hack2own.com">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bot">
+      <span>© 2026 Hack2Own (H2O). For educational use only.</span>
+      <span>built for the curious · stay legal · stay deep</span>
+    </div>
+  </div>
+</footer>
+
+  
+<script src="../../assets/js/main.js"></script>
+<script src="../../assets/js/levels.js"></script>
+<script>
+(function () {
+  var sideLinks = document.querySelectorAll('.lesson-side a[href^="#"]');
+  if (!sideLinks.length) return;
+  var targets = Array.from(sideLinks).map(function (a) {
+    return document.querySelector(a.getAttribute('href'));
+  }).filter(Boolean);
+  var THRESHOLD = 100;
+  function setActive(id) {
+    sideLinks.forEach(function (a) {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+    });
+  }
+  function update() {
+    var current = targets[0];
+    targets.forEach(function (el) {
+      if (el.getBoundingClientRect().top <= THRESHOLD) { current = el; }
+    });
+    setActive(current.id);
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+</script>
+</body>
+</html>
